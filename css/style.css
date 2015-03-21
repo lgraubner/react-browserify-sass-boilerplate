@@ -45,7 +45,11 @@ button,
 input,
 textarea {
     outline: 0 none;
-    -webkit-apearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
     border-radius: 0;
 }
 
@@ -56,4 +60,6 @@ textarea {
 
 input[type="checkbox"] {
     -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
+    appearance: checkbox;
 }
