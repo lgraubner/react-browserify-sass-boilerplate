@@ -19,3 +19,9 @@ function debounce(func, wait, immediate) {
 jQuery.fn.exists = function() {
 	return this.length > 0;
 };
+
+jQuery.fn.preloadImages = function() {
+	for (var i = 0; i < arguments.length; i++) {
+		$("<img />").attr("src", arguments[i]);
+	}
+};
