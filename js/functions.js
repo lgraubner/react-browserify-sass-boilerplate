@@ -15,13 +15,22 @@ function debounce(func, wait, immediate) {
 	};
 }
 
+function preloadImages() {
+	for (var i = 0; i < arguments.length; i++) {
+		$("<img />").attr("src", arguments[i]);
+	}
+}
 
 jQuery.fn.exists = function() {
 	return this.length > 0;
 };
 
-jQuery.fn.preloadImages = function() {
-	for (var i = 0; i < arguments.length; i++) {
-		$("<img />").attr("src", arguments[i]);
-	}
-};
+(function(window, document, $, undefined) {
+	"use strict";
+
+	$('a[href^="tel:"]').click(function(e) {
+	    if ($(window).width() > 768) {
+	        e.preventDefault();
+	    }
+	});
+})();
