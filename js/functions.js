@@ -33,4 +33,4 @@ jQuery.fn.exists = function() {
 	        e.preventDefault();
 	    }
 	});
-})();
+})(this, document, jQuery);
