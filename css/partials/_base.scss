@@ -8,20 +8,23 @@ html {
 }
 
 body {
-    font-family: "Helvetica", Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: #222;
 }
 
-.clearfix:before,
-.clearfix:after {
-    display: table;
-    content: " ";
-}
+.clearfix {
 
-.clearfix:after {
-    clear:both;
+    &:before,
+    &:after {
+        display: table;
+        content: " ";
+    }
+
+    &:after {
+        clear: both;
+    }
 }
 
 ul {
@@ -39,9 +42,7 @@ img {
     max-width: 100%;
 }
 
-button,
-input,
-textarea {
+button {
     outline: 0 none;
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -53,6 +54,7 @@ textarea {
 
 input,
 textarea {
+    @extend button;
     font-size: 16px;
 }
 
@@ -77,4 +79,5 @@ a[href^="tel:"] {
     text-decoration: none;
     color: #222;
     cursor: default;
+    border: none !important;
 }
