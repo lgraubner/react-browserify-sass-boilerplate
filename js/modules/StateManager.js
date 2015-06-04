@@ -6,6 +6,7 @@ var StateManager = (function(window, document, $, undefined) {
         _opts = null,
         $win = $(window);
 
+
     // Funktion fuer Mobile
     var _displayMobile = function() {
         if (typeof _opts.mobile === "function") _opts.mobile();
@@ -32,8 +33,8 @@ var StateManager = (function(window, document, $, undefined) {
     };
 
     // Getter fuer state
-    var getState = function() {
-        return _state;
+    var matchState = function(state) {
+        return _state == state ? true : false;
     };
 
     // init Funktion
@@ -48,7 +49,7 @@ var StateManager = (function(window, document, $, undefined) {
 
     return {
         init: init,
-        getState: getState
+        matchState: matchState
     };
 
 })(this, document, jQuery);
