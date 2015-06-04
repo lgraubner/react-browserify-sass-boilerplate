@@ -2,10 +2,11 @@
     "use strict";
 
     var map;
-    function initialize() {
+
+    var initialize = function() {
         var myLatlng = new google.maps.LatLng(-34.397, 150.644),
-            /* Drag ausschalten, wenn Mobilgerät */
-            isDraggable = $(document).width() > 768 ? true : false,
+            /* Drag ausschalten, wenn Mobilgeraet */
+            isDraggable = StateManager.getState() == "mobile" ? true : false,
             /* oft benutzte default options*/
             mapOptions = {
                 draggable: isDraggable,
@@ -36,13 +37,13 @@
             infowindow.open(map, marker);
         });
 
-        /* Center bei Änderung der Kartengröße aktualisieren */
+        /* Center bei Aenderung der Kartengroesse aktualisieren */
         google.maps.event.addDomListener(window, 'resize', function() {
             var center = map.getCenter();
             google.maps.event.trigger(map, 'resize');
             map.setCenter(center);
         });
-    }
+    };
 
     /* Karte initialisieren */
     google.maps.event.addDomListener(window, 'load', initialize);
