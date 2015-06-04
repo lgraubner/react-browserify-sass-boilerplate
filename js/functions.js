@@ -24,13 +24,3 @@ function preloadImages() {
 jQuery.fn.exists = function() {
 	return this.length > 0;
 };
-
-(function(window, document, $, undefined) {
-	"use strict";
-
-	$('a[href^="tel:"]').click(function(e) {
-	    if ($(window).width() > 768) {
-	        e.preventDefault();
-	    }
-	});
-})(this, document, jQuery);
