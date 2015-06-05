@@ -1,55 +1,77 @@
 var StateManager = (function(window, document, $, undefined) {
     "use strict";
 
-    var _state = null,
-        _breakpoint = null,
-        _opts = null,
-        $win = $(window);
+    var _states = [],
+        _currentStates = [],
+        $win = $(window),
+        i, removeItem, match, inArray;
 
-
-    // Funktion fuer Mobile
-    var _displayMobile = function() {
-        if (typeof _opts.mobile === "function") _opts.mobile();
-    };
-
-    // Funktion fuer Desktop
-    var _displayDesktop = function() {
-        if (typeof _opts.desktop === "function") _opts.desktop();
+    var _debounce = function(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
     };
 
     // Event Listener fuer Window resize
     var _resizeListener = function() {
-        if ($win.width() < _breakpoint) {
-            if (_state !== "mobile") {
-                _state = "mobile";
-                _displayMobile();
+        $.each(_states, function(key, state) {
+            match = _match(state);
+            inArray = matchState(state.name);
+
+            if (!inArray && match) {
+                if (state.match) state.match.call(window);
+                _currentStates.push(state.name);
+            } else if (inArray && !match) {
+                removeItem = state.name;
+                _currentStates = $.grep(_currentStates, function(val) {
+                    return val != removeItem;
+                });
             }
-        } else {
-            if (_state !== "desktop") {
-                _state = "desktop";
-                _displayDesktop();
-            }
-        }
+        });
     };
 
-    // Getter fuer state
-    var matchState = function(state) {
-        return _state == state ? true : false;
+    var _match = function(state) {
+        var width = $win.width();
+        if (state.minWidth && state.maxWidth) {
+            if (width >= state.minWidth && width <= state.maxWidth) {
+                return true;
+            }
+        } else if (state.minWidth && width >= state.minWidth || state.maxWidth && width <= state.maxWidth) {
+            return true;
+        }
+
+        return false;
+    };
+
+    var matchState = function(stateName) {
+        return $.inArray(stateName, _currentStates) === -1 ? false : true;
+    };
+
+    var addState = function(state) {
+        _states.push(state);
+
     };
 
     // init Funktion
-    // akzeptiert Objekt mit breakpoint (int), mobile (function), desktop (function)
-    var init = function(options) {
-        _opts = options;
-        _breakpoint = _opts.breakpoint || 768;
-
+    var init = function() {
         _resizeListener();
-        $win.on("resize", _resizeListener);
+
+        $win.on("resize", _debounce(_resizeListener, 100));
     };
 
     return {
         init: init,
-        matchState: matchState
+        matchState: matchState,
+        addState: addState
     };
 
 })(this, document, jQuery);
