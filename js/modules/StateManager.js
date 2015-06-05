@@ -1,6 +1,6 @@
 /**
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.1
+ * @version 0.1.1
  *
  * Handles browser states depending on it's width.
  */
@@ -45,8 +45,11 @@ var StateManager = (function(window, document, $, undefined) {
 
             if (!inArray && match) {
                 if (state.match) state.match.call(window);
+
                 _activeStates.push(state.name);
             } else if (inArray && !match) {
+                if (state.match) state.unmatch.call(window);
+
                 removeItem = state.name;
                 _activeStates = $.grep(_activeStates, function(val) {
                     return val != removeItem;
