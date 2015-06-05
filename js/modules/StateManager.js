@@ -16,9 +16,9 @@ var StateManager = (function(window, document, $, undefined) {
     /**
      * Debounce function to delay function calls.
      *
-     * @param {func} function to call
-     * @param {delay} delay in milliseconds
-     * @param {immediate}
+     * @param  {function} func      function to call
+     * @param  {number} wait        delay in milliseconds
+     * @param  {boolean} immediate
      */
     var _debounce = function(func, wait, immediate) {
         var timeout;
@@ -61,8 +61,8 @@ var StateManager = (function(window, document, $, undefined) {
     /**
      * Checks if given state matches.
      *
-     * @param {state} state object
-     * @return {boolean}
+     * @param  {object} state   state object
+     * @return {boolean}        matches
      */
     var _match = function(state) {
         var width = $win.width();
@@ -79,9 +79,8 @@ var StateManager = (function(window, document, $, undefined) {
 
     /**
      * Checks if a state is currently active.
-     *
-     * @param {stateName} name of the state
-     * @return {boolean}
+     * @param  {string} stateName   name of the state
+     * @return {boolean}            matches
      */
     var matchState = function(stateName) {
         return $.inArray(stateName, _activeStates) === -1 ? false : true;
@@ -90,7 +89,7 @@ var StateManager = (function(window, document, $, undefined) {
     /**
      * Adds state object to check for matches.
      *
-     * @param {state} state object
+     * @param  {object} state state object
      */
     var addState = function(state) {
         _states.push(state);
