@@ -2,7 +2,7 @@
  * Handles browser states depending on it's width.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.1.1
+ * @version 0.1.2
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -61,7 +61,7 @@ var StateManager = (function(window, document, $, undefined) {
     /**
      * Checks if given state matches.
      *
-     * @param  {object} state   state object
+     * @param  {Object} state   state object
      * @return {boolean}        matches
      */
     var _match = function(state) {
@@ -89,7 +89,7 @@ var StateManager = (function(window, document, $, undefined) {
     /**
      * Adds state object to check for matches.
      *
-     * @param  {object} state state object
+     * @param  {Object} state state object
      */
     var addState = function(state) {
         _states.push(state);
