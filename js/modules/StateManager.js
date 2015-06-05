@@ -16,7 +16,7 @@ var StateManager = (function(window, document, $, undefined) {
     /**
      * Debounce function to delay function calls.
      *
-     * @param  {function} func      function to call
+     * @param  {Function} func      function to call
      * @param  {number} wait        delay in milliseconds
      * @param  {boolean} immediate
      */
