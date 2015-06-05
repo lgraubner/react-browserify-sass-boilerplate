@@ -1,11 +1,25 @@
+/**
+ * @author Lars Graubner <mail@larsgraubner.de>
+ * @version 0.1
+ *
+ * Handles browser states depending on it's width.
+ */
+
 var StateManager = (function(window, document, $, undefined) {
     "use strict";
 
     var _states = [],
-        _currentStates = [],
+        _activeStates = [],
         $win = $(window),
-        i, removeItem, match, inArray;
+        removeItem, match, inArray;
 
+    /**
+     * Debounce function to delay function calls.
+     *
+     * @param {func} function to call
+     * @param {delay} delay in milliseconds
+     * @param {immediate}
+     */
     var _debounce = function(func, wait, immediate) {
         var timeout;
         return function() {
@@ -21,7 +35,9 @@ var StateManager = (function(window, document, $, undefined) {
         };
     };
 
-    // Event Listener fuer Window resize
+    /**
+     * Listener for window resize event. Checks if any state matches.
+     */
     var _resizeListener = function() {
         $.each(_states, function(key, state) {
             match = _match(state);
@@ -29,16 +45,22 @@ var StateManager = (function(window, document, $, undefined) {
 
             if (!inArray && match) {
                 if (state.match) state.match.call(window);
-                _currentStates.push(state.name);
+                _activeStates.push(state.name);
             } else if (inArray && !match) {
                 removeItem = state.name;
-                _currentStates = $.grep(_currentStates, function(val) {
+                _activeStates = $.grep(_activeStates, function(val) {
                     return val != removeItem;
                 });
             }
         });
     };
 
+    /**
+     * Checks if given state matches.
+     *
+     * @param {state} state object
+     * @return {boolean}
+     */
     var _match = function(state) {
         var width = $win.width();
         if (state.minWidth && state.maxWidth) {
@@ -52,16 +74,28 @@ var StateManager = (function(window, document, $, undefined) {
         return false;
     };
 
+    /**
+     * Checks if a state is currently active.
+     *
+     * @param {stateName} name of the state
+     * @return {boolean}
+     */
     var matchState = function(stateName) {
-        return $.inArray(stateName, _currentStates) === -1 ? false : true;
+        return $.inArray(stateName, _activeStates) === -1 ? false : true;
     };
 
+    /**
+     * Adds state object to check for matches.
+     *
+     * @param {state} state object
+     */
     var addState = function(state) {
         _states.push(state);
-
     };
 
-    // init Funktion
+    /**
+     * Init function. Registers resize listener and executes it once.
+     */
     var init = function() {
         _resizeListener();
 
