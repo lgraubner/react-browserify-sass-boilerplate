@@ -1,8 +1,8 @@
 /**
+ * Handles browser states depending on it's width.
+ *
  * @author Lars Graubner <mail@larsgraubner.de>
  * @version 0.1.1
- *
- * Handles browser states depending on it's width.
  */
 
 var StateManager = (function(window, document, $, undefined) {
