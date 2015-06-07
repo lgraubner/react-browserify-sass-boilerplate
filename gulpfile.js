@@ -8,12 +8,12 @@ var gulp = require("gulp"),
 
 var paths = {
     css: {
-        src: ["!./css/sass", "./css/**/*.css"],
+        src: ["!./css/sass/**/*.scss", "./css/**/*.css"],
         dest: "./dist/css/"
     },
     sass: {
         src: "./src/css/sass/**/*.scss",
-        dest: "./css/"
+        dest: "./src/css/"
     },
     js: {
         src: ["./src/js/**/*.js", "!./src/js/vendor/modernizr.custom.js"],
@@ -52,8 +52,8 @@ gulp.task("styles", ["sass"], function() {
 });
 
 gulp.task("watch", function() {
-    gulp.watch(["./css/**/*.scss", "./css/**/*.css"], ["styles"]);
-    gulp.watch(["./js/**/*.js"], ["scripts"]);
+    gulp.watch(["./src/css/**/*.scss", "./src/css/**/*.css"], ["styles"]);
+    gulp.watch(["./src/js/**/*.js"], ["scripts"]);
 });
 
 gulp.task("default", ["scripts", "styles"]);
