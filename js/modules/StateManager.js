@@ -79,6 +79,7 @@ var StateManager = (function(window, document, $, undefined) {
 
     /**
      * Checks if a state is currently active.
+     * 
      * @param  {string} stateName   name of the state
      * @return {boolean}            matches
      */
