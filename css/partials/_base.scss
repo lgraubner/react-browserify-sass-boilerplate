@@ -1,6 +1,5 @@
 html {
     box-sizing: border-box;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 *, *:after, *:before {
@@ -8,10 +7,10 @@ html {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-family: $base-font-stack;
+    font-size: $base-font-size;
     font-weight: 400;
-    color: #222;
+    color: $base-font-color;
 }
 
 .clearfix {
@@ -77,7 +76,7 @@ input[type="checkbox"] {
 
 a[href^="tel:"] {
     text-decoration: none;
-    color: #222;
+    color: $base-font-color;
     cursor: default;
     border: none !important;
 }
