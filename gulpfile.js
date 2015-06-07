@@ -3,23 +3,21 @@ var gulp = require("gulp"),
     sass = require("gulp-sass"),
     uglify = require("gulp-uglify"),
     autoprefixer = require("gulp-autoprefixer"),
-    livereload = require("gulp-livereload"),
     minifyCSS = require("gulp-minify-css"),
     sourcemaps = require('gulp-sourcemaps');
 
-gulp.task("scripts", function() {
+gulp.task("scripts", ["copy"], function() {
     return gulp.src(["./js/**/*.js", "!./js/vendor/modernizr.custom.js"])
         .pipe(sourcemaps.init())
         .pipe(concat("scripts.js"))
         .pipe(uglify())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("./dist/js/"))
-        .pipe(livereload());
+        .pipe(gulp.dest("./dist/js/"));
 });
 
 gulp.task("copy", function() {
     return gulp.src("./js/vendor/modernizr.custom.js")
-        .pipe(gulp.dest("./dist/vendor/"));
+        .pipe(gulp.dest("./dist/js/vendor/"));
 });
 
 gulp.task("sass", function() {
@@ -35,12 +33,10 @@ gulp.task("styles", ["sass"], function() {
         .pipe(concat("styles.css"))
         .pipe(minifyCSS())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("./dist/css/"))
-        .pipe(livereload());
+        .pipe(gulp.dest("./dist/css/"));
 });
 
 gulp.task("watch", function() {
-    livereload.listen();
     gulp.watch(["./css/**/*.scss", "./css/**/*.css"], ["styles"]);
     gulp.watch(["./js/**/*.js"], ["scripts"]);
 });
