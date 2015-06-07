@@ -29,5 +29,8 @@ node_modules
 bower_components
 .sass-cache
 
-dist
-./src/css/styles.css
+dist/**/*.js
+dist/**/*.css
+dist/**/*.map
+
+src/css/styles.css
