@@ -6,34 +6,49 @@ var gulp = require("gulp"),
     minifyCSS = require("gulp-minify-css"),
     sourcemaps = require('gulp-sourcemaps');
 
+var paths = {
+    css: {
+        src: ["!./css/sass", "./css/**/*.css"],
+        dest: "./dist/css/"
+    },
+    sass: {
+        src: "./src/css/sass/**/*.scss",
+        dest: "./css/"
+    },
+    js: {
+        src: ["./src/js/**/*.js", "!./src/js/vendor/modernizr.custom.js"],
+        dest: "./dist/js/"
+    }
+};
+
 gulp.task("scripts", ["copy"], function() {
-    return gulp.src(["./js/**/*.js", "!./js/vendor/modernizr.custom.js"])
+    return gulp.src(paths.js.src)
         .pipe(sourcemaps.init())
         .pipe(concat("scripts.js"))
         .pipe(uglify())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("./dist/js/"));
+        .pipe(gulp.dest(paths.js.dest));
 });
 
 gulp.task("copy", function() {
-    return gulp.src("./js/vendor/modernizr.custom.js")
-        .pipe(gulp.dest("./dist/js/vendor/"));
+    return gulp.src("./src/js/vendor/modernizr.custom.js")
+        .pipe(gulp.dest(paths.js.dest + "vendor/"));
 });
 
 gulp.task("sass", function() {
-    return gulp.src("./css/sass/**/*.scss")
+    return gulp.src(paths.sass.src)
         .pipe(sass().on("error", sass.logError))
-        .pipe(gulp.dest("./css/"));
+        .pipe(gulp.dest(paths.sass.dest));
 });
 
 gulp.task("styles", ["sass"], function() {
-    return gulp.src(["!./css/sass", "./css/**/*.css"])
+    return gulp.src(paths.css.src)
         .pipe(sourcemaps.init())
         .pipe(autoprefixer())
         .pipe(concat("styles.css"))
         .pipe(minifyCSS())
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("./dist/css/"));
+        .pipe(gulp.dest(paths.css.dest));
 });
 
 gulp.task("watch", function() {
