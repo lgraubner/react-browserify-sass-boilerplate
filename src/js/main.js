@@ -39,6 +39,19 @@
 
         StateManager.init();
 
+        GoogleMap.create({
+            name: "kontakt",
+            coords: "1235,23464",
+            options: {
+                zoom: 10
+            },
+            markers: {
+                coords: "123543,32646",
+                info: "This is the info",
+                title: "hello world"
+            }
+        });
+
         app.init();
     });
 
