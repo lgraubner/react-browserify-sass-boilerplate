@@ -2,7 +2,7 @@
  * Simple wrapper for Google Maps API v3.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.1.0
+ * @version 0.2.0
  */
 var GoogleMap = (function(window, document, $, google) {
     "use strict";
@@ -19,11 +19,8 @@ var GoogleMap = (function(window, document, $, google) {
         scrollwheel: true,
         disableDefaultUI: false,
         disableDoubleClickZoom: false,
-        minZoom: null,
-        mapTypeControl:false,
-        maxZoom: null,
-        zoom: 11,
-        center: null,
+        mapTypeControl: false,
+        zoom: 11
     };
 
     /**
@@ -32,24 +29,28 @@ var GoogleMap = (function(window, document, $, google) {
      * @param  {Object} mapOptions  object with options for new map
      */
     var _initMap = function(mapOptions) {
+        var coords = mapOptions.coords.split(",");
+
         var options = $.extend({
-                center: new google.maps.Latlng(mapOptions.coords)
+                center: new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]))
             }, _defaults, mapOptions.options);
 
-        var map = new google.maps.Map($(mapOptions.container).get(), options),
-            marker, coords;
+        var map = new google.maps.Map($(mapOptions.container).get(0), options),
+            marker;
 
-        $.each(mapOptions.marker, function(key, marker) {
-            coords = marker.coords.split(",");
-            marker = new google.maps.Marker({
-                position : new google.maps.LatLng(coords[0], coords[1]),
-                icon : (marker.icon ? new google.maps.MarkerImage(marker.icon) : null),
-                title : marker.title,
-                map : map
+            if (mapOptions.marker) {
+            $.each(mapOptions.marker, function(key, marker) {
+                coords = marker.coords.split(",");
+                marker = new google.maps.Marker({
+                    position : new google.maps.LatLng(coords[0], coords[1]),
+                    icon : (marker.icon ? new google.maps.MarkerImage(marker.icon) : null),
+                    title : marker.title,
+                    map : map
+                });
+
+                // TODO: Marker infowindows
             });
-
-            // TODO: Marker infowindows
-        });
+        }
 
         google.maps.event.addDomListener(window, 'resize', function() {
             var center = map.getCenter();
@@ -93,23 +94,36 @@ var GoogleMap = (function(window, document, $, google) {
     };
 
     /**
-     * Listens for dom ready and initializes all maps in the queue.
+     * Executes when Google Maps is loaded. Auto detects maps and initializes all maps in queue.
      */
     var init = function() {
-        google.maps.event.addDomListener(window, 'load', function() {
-            $.each(_queue, function(key, mapOptions) {
-                _initMap(mapOptions);
+        $("[data-gmap-coords]").each(function() {
+            var $el = $(this),
+                data = $el.attr("data-gmap-coords").split(","),
+                name = $el.attr("data-gmap-name") || null,
+                zoom = parseInt(data[2]) || _defaults.zoom;
+
+            _initMap({
+                name: name,
+                container: this,
+                coords: data[0] + "," + data[1],
+                options: {
+                    zoom: zoom
+                }
             });
-            _loaded = true;
+        });
+
+        _loaded = true;
+        $.each(_queue, function(key, mapOptions) {
+            _initMap(mapOptions);
         });
     };
 
     return {
+        init: init,
         create: create,
         getMap: getMap,
         setDefaults: setDefaults
     };
 
 })(this, document, jQuery, google);
-
-GoogleMap.init();
