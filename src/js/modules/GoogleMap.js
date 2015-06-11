@@ -29,13 +29,16 @@ var GoogleMap = (function(window, document, $, google) {
      * @param  {Object} mapOptions  object with options for new map
      */
     var _initMap = function(mapOptions) {
-        var coords = mapOptions.coords.split(",");
+        var $cont = $(mapOptions.container),
+            coords = mapOptions.coords.split(",");
+
+        if ($cont.attr("data-gmap-initialized") == "true") return;
 
         var options = $.extend({
                 center: new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]))
             }, _defaults, mapOptions.options);
 
-        var map = new google.maps.Map($(mapOptions.container).get(0), options),
+        var map = new google.maps.Map($cont.get(0), options),
             marker;
 
             if (mapOptions.marker) {
@@ -59,6 +62,7 @@ var GoogleMap = (function(window, document, $, google) {
         });
 
         _maps[mapOptions.name] = map;
+        $cont.attr("data-gmap-initialized", true);
     };
 
     /**
