@@ -1,114 +1,115 @@
 /**
- * Handles browser states depending on it's width.
+ * Simple wrapper for Google Maps API v3.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.1.2
+ * @version 0.1.0
  */
-
-var StateManager = (function(window, document, $, undefined) {
+var GoogleMap = (function(window, document, $, google) {
     "use strict";
 
-    var _states = [],
-        _activeStates = [],
-        $win = $(window),
-        removeItem, match, inArray;
+    var _maps = {},
+        _queue = [],
+        _loaded = false;
 
     /**
-     * Debounce function to delay function calls.
-     *
-     * @param  {Function} func      function to call
-     * @param  {number} wait        delay in milliseconds
-     * @param  {boolean} immediate
+     * Default Google Map settings.
      */
-    var _debounce = function(func, wait, immediate) {
-        var timeout;
-        return function() {
-            var context = this, args = arguments;
-            var later = function() {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            var callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
-        };
+    var _defaults = {
+        draggable: true,
+        scrollwheel: true,
+        disableDefaultUI: false,
+        disableDoubleClickZoom: false,
+        minZoom: null,
+        mapTypeControl:false,
+        maxZoom: null,
+        zoom: 11,
+        center: null,
     };
 
     /**
-     * Listener for window resize event. Checks if any state matches.
+     * Initializes a Google Map with given options.
+     *
+     * @param  {Object} mapOptions  object with options for new map
      */
-    var _resizeListener = function() {
-        $.each(_states, function(key, state) {
-            match = _match(state);
-            inArray = matchState(state.name);
+    var _initMap = function(mapOptions) {
+        var options = $.extend({
+                center: new google.maps.Latlng(mapOptions.coords)
+            }, _defaults, mapOptions.options);
 
-            if (!inArray && match) {
-                if (state.match) state.match.call(window);
+        var map = new google.maps.Map($(mapOptions.container).get(), options),
+            marker, coords;
 
-                _activeStates.push(state.name);
-            } else if (inArray && !match) {
-                if (state.match) state.unmatch.call(window);
+        $.each(mapOptions.marker, function(key, marker) {
+            coords = marker.coords.split(",");
+            marker = new google.maps.Marker({
+                position : new google.maps.LatLng(coords[0], coords[1]),
+                icon : (marker.icon ? new google.maps.MarkerImage(marker.icon) : null),
+                title : marker.title,
+                map : map
+            });
 
-                removeItem = state.name;
-                _activeStates = $.grep(_activeStates, function(val) {
-                    return val != removeItem;
-                });
-            }
+            // TODO: Marker infowindows
+        });
+
+        google.maps.event.addDomListener(window, 'resize', function() {
+            var center = map.getCenter();
+            google.maps.event.trigger(map, 'resize');
+            map.setCenter(center);
+        });
+
+        _maps[mapOptions.name] = map;
+    };
+
+    /**
+     * Getter for created maps by name.
+     *
+     * @param  {string} name    name of map
+     * @return {Map}            Google map
+     */
+    var getMap = function(name) {
+        return _maps[name];
+    };
+
+    /**
+     * Set defaults to use for new maps.
+     *
+     * @param  {Object} options     object containing default options
+     */
+    var setDefaults = function(options) {
+        _defaults = $.extend(_defaults, options);
+    };
+
+    /**
+     * Adds map to create to queue or initializes it if Google maps is ready.
+     *
+     * @param  {Object} mapOptions  options for new Google Map
+     */
+    var create = function(mapOptions) {
+        if (!_loaded) {
+            _queue.push(mapOptions);
+        } else {
+            _initMap(mapOptions);
+        }
+    };
+
+    /**
+     * Listens for dom ready and initializes all maps in the queue.
+     */
+    var init = function() {
+        google.maps.event.addDomListener(window, 'load', function() {
+            $.each(_queue, function(key, mapOptions) {
+                _initMap(mapOptions);
+            });
+            _loaded = true;
         });
     };
 
-    /**
-     * Checks if given state matches.
-     *
-     * @param  {Object} state   state object
-     * @return {boolean}        matches
-     */
-    var _match = function(state) {
-        var width = $win.width();
-        if (state.minWidth && state.maxWidth) {
-            if (width >= state.minWidth && width <= state.maxWidth) {
-                return true;
-            }
-        } else if (state.minWidth && width >= state.minWidth || state.maxWidth && width <= state.maxWidth) {
-            return true;
-        }
-
-        return false;
-    };
-
-    /**
-     * Checks if a state is currently active.
-     *
-     * @param  {string} stateName   name of the state
-     * @return {boolean}            matches
-     */
-    var matchState = function(stateName) {
-        return $.inArray(stateName, _activeStates) === -1 ? false : true;
-    };
-
-    /**
-     * Adds state object to check for matches.
-     *
-     * @param  {Object} state state object
-     */
-    var addState = function(state) {
-        _states.push(state);
-    };
-
-    /**
-     * Init function. Registers resize listener and executes it once.
-     */
-    var init = function() {
-        _resizeListener();
-
-        $win.on("resize", _debounce(_resizeListener, 100));
-    };
-
     return {
-        init: init,
-        matchState: matchState,
-        addState: addState
+        create: create,
+        getMap: getMap,
+        setDefaults: setDefaults
     };
 
-})(this, document, jQuery);
+})(this, document, jQuery, google);
+
+GoogleMap.init();
