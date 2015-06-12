@@ -2,7 +2,7 @@
  * Simple wrapper for Google Maps API v3.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.2.0
+ * @version 0.3.0
  */
 var GoogleMap = (function(window, document, $, google) {
     "use strict";
