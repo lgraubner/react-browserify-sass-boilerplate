@@ -15,12 +15,31 @@ var GoogleMap = (function(window, document, $, google) {
      * Default Google Map settings.
      */
     var _defaults = {
-        draggable: true,
-        scrollwheel: true,
-        disableDefaultUI: false,
-        disableDoubleClickZoom: false,
-        mapTypeControl: false,
-        zoom: 11
+        options: {
+            draggable: true,
+            scrollwheel: true,
+            disableDefaultUI: false,
+            disableDoubleClickZoom: false,
+            mapTypeControl: false,
+            zoom: 11
+        }
+    };
+
+    /**
+     * Generates a random string.
+     *
+     * @param  {number} length  length of the random string
+     * @return {string}         string with random characters
+     */
+    var _genRandStr = function(length) {
+        var str = "",
+            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < length; i++ ) {
+            str += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        return str;
     };
 
     /**
@@ -30,19 +49,21 @@ var GoogleMap = (function(window, document, $, google) {
      */
     var _initMap = function(mapOptions) {
         var $cont = $(mapOptions.container),
-            coords = mapOptions.coords.split(",");
+            data = $cont.data(),
+            coords;
 
-        if ($cont.attr("data-gmap-initialized") == "true") return;
+        if ($cont.length === 0 || $cont.data("initialized") === true) return;
 
-        var options = $.extend({
-                center: new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]))
-            }, _defaults, mapOptions.options);
+        var opts = $.extend(true, {}, _defaults, mapOptions, data);
 
-        var map = new google.maps.Map($cont.get(0), options),
+        coords = opts.coords.split(",");
+        opts.options.center = new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]));
+
+        var map = new google.maps.Map($cont.get(0), opts.options),
             marker;
 
-            if (mapOptions.marker) {
-            $.each(mapOptions.marker, function(key, marker) {
+        if (opts.marker) {
+            $.each(opts.marker, function(key, marker) {
                 coords = marker.coords.split(",");
                 marker = new google.maps.Marker({
                     position : new google.maps.LatLng(coords[0], coords[1]),
@@ -61,18 +82,18 @@ var GoogleMap = (function(window, document, $, google) {
             map.setCenter(center);
         });
 
-        _maps[mapOptions.name] = map;
-        $cont.attr("data-gmap-initialized", true);
+        var name = opts.name || _genRandStr(5);
+        _maps[name] = map;
+        $cont.data("initialized", true);
     };
 
     /**
-     * Getter for created maps by name.
+     * Returns all initialized maps.
      *
-     * @param  {string} name    name of map
      * @return {Map}            Google map
      */
-    var getMap = function(name) {
-        return _maps[name];
+    var getMaps = function() {
+        return _maps;
     };
 
     /**
@@ -101,19 +122,10 @@ var GoogleMap = (function(window, document, $, google) {
      * Executes when Google Maps is loaded. Auto detects maps and initializes all maps in queue.
      */
     var init = function() {
-        $("[data-gmap-coords]").each(function() {
-            var $el = $(this),
-                data = $el.attr("data-gmap-coords").split(","),
-                name = $el.attr("data-gmap-name") || null,
-                zoom = parseInt(data[2]) || _defaults.zoom;
-
+        $('[data-spy="gmap"]').each(function() {
             _initMap({
-                name: name,
-                container: this,
-                coords: data[0] + "," + data[1],
-                options: {
-                    zoom: zoom
-                }
+            	name: $(this).attr("data-name"),
+                container: this
             });
         });
 
@@ -126,7 +138,7 @@ var GoogleMap = (function(window, document, $, google) {
     return {
         init: init,
         create: create,
-        getMap: getMap,
+        getMaps: getMaps,
         setDefaults: setDefaults
     };
 
