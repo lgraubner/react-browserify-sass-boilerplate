@@ -2,7 +2,7 @@
  * Simple wrapper for Google Maps API v3.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.3.0
+ * @version 0.4.0
  */
 var GoogleMap = (function(window, document, $, google) {
     "use strict";
@@ -60,7 +60,7 @@ var GoogleMap = (function(window, document, $, google) {
         opts.options.center = new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]));
 
         var map = new google.maps.Map($cont.get(0), opts.options),
-            marker;
+            marker, infowindow;
 
         if (opts.marker) {
             $.each(opts.marker, function(key, marker) {
@@ -72,7 +72,19 @@ var GoogleMap = (function(window, document, $, google) {
                     map : map
                 });
 
-                // TODO: Marker infowindows
+                if (marker.info) {
+                    infowindow = new google.maps.InfoWindow({
+                        content: marker.info.content
+                    });
+
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.open(map, marker);
+                    });
+
+                    if (marker.info.show) {
+                        infowindow.open();
+                    }
+                }
             });
         }
 
