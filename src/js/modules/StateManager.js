@@ -2,7 +2,7 @@
  * Handles browser states depending on it's width.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.1.2
+ * @version 0.1.3
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -48,7 +48,7 @@ var StateManager = (function(window, document, $, undefined) {
 
                 _activeStates.push(state.name);
             } else if (inArray && !match) {
-                if (state.match) state.unmatch.call(window);
+                if (state.unmatch) state.unmatch.call(window);
 
                 removeItem = state.name;
                 _activeStates = $.grep(_activeStates, function(val) {
@@ -79,7 +79,7 @@ var StateManager = (function(window, document, $, undefined) {
 
     /**
      * Checks if a state is currently active.
-     * 
+     *
      * @param  {string} stateName   name of the state
      * @return {boolean}            matches
      */
