@@ -2,7 +2,7 @@
  * Handles browser states depending on it's width.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 0.1.3
+ * @version 1.0.0
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -10,8 +10,7 @@ var StateManager = (function(window, document, $, undefined) {
 
     var _states = [],
         _activeStates = [],
-        $win = $(window),
-        removeItem, match, inArray;
+        $win, removeItem, match, inArray;
 
     /**
      * Debounce function to delay function calls.
@@ -36,9 +35,9 @@ var StateManager = (function(window, document, $, undefined) {
     };
 
     /**
-     * Listener for window resize event. Checks if any state matches.
+     * Triggers all matching states.
      */
-    var _resizeListener = function() {
+    var _triggerStates = function() {
         $.each(_states, function(key, state) {
             match = _match(state);
             inArray = matchState(state.name);
@@ -94,21 +93,32 @@ var StateManager = (function(window, document, $, undefined) {
      */
     var addState = function(state) {
         _states.push(state);
+        _triggerStates();
     };
+
 
     /**
-     * Init function. Registers resize listener and executes it once.
+     * Constructor for new StateManager instances.
+     *
+     * @param  {Array} states   Array of states
      */
-    var init = function() {
-        _resizeListener();
+    var constructor = function(states) {
+        $win = $(window);
 
-        $win.on("resize", _debounce(_resizeListener, 100));
+        $.each(states, function(key, state) {
+            addState(state);
+        });
+
+        _triggerStates();
+
+        $win.on("resize", _debounce(_triggerStates, 100));
     };
 
-    return {
-        init: init,
-        matchState: matchState,
-        addState: addState
+    constructor.prototype = {
+        addState: addState,
+        matchState: matchState
     };
+
+    return constructor;
 
 })(this, document, jQuery);
