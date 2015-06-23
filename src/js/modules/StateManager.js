@@ -2,7 +2,7 @@
  * Handles browser states depending on it's width.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 var StateManager = (function(window, document, $, undefined) {
