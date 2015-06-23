@@ -96,6 +96,14 @@ var StateManager = (function(window, document, $, undefined) {
         _triggerStates();
     };
 
+    /**
+     * Destroys the StateManager and removes all States and EventListeners.
+     */
+    var destroy = function() {
+        $win.off("resize.sm");
+        _states = [];
+        _activeStates = [];
+    };
 
     /**
      * Constructor for new StateManager instances.
@@ -111,12 +119,13 @@ var StateManager = (function(window, document, $, undefined) {
 
         _triggerStates();
 
-        $win.on("resize", _debounce(_triggerStates, 100));
+        $win.on("resize.sm", _debounce(_triggerStates, 100));
     };
 
     constructor.prototype = {
         addState: addState,
-        matchState: matchState
+        matchState: matchState,
+        destroy: destroy
     };
 
     return constructor;
