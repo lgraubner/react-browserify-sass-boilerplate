@@ -8,11 +8,13 @@ var minifyCSS = require("gulp-minify-css");
 var clean = require("gulp-clean");
 var sass = require("gulp-sass");
 var concat = require("gulp-concat");
-var pkg = require("./package.json");
+var autoprefixer = require("gulp-autoprefixer");
+var livereload = require("gulp-livereload");
 
 gulp.task("styles", function() {
     return gulp.src("src/scss/main.scss")
         .pipe(sass().on("error", sass.logError))
+        .pipe(autoprefixer())
         .pipe(minifyCSS())
         .pipe(rename("styles.css"))
         .pipe(gulp.dest("dist/css/"));
@@ -44,7 +46,7 @@ gulp.task("copy", ["clean"], function() {
 });
 
 gulp.task("watch", ["default"], function() {
-    // TODO: Browser reload
+    livereload.listen();
     gulp.watch(["src/scss/**/*.scss", "src/scss/**/*.css"], ["styles"]);
     gulp.watch("src/js/**/*.js", ["scripts"]);
 });
