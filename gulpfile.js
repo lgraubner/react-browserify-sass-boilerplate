@@ -10,6 +10,7 @@ var sass = require("gulp-sass");
 var concat = require("gulp-concat");
 var autoprefixer = require("gulp-autoprefixer");
 var livereload = require("gulp-livereload");
+var imagemin = require("gulp-imagemin");
 
 gulp.task("styles", function() {
     return gulp.src("src/scss/main.scss")
@@ -17,7 +18,7 @@ gulp.task("styles", function() {
         .pipe(autoprefixer())
         .pipe(minifyCSS())
         .pipe(rename("styles.css"))
-        .pipe(gulp.dest("dist/css/"));
+        .pipe(gulp.dest("dist/css"));
 });
 
 gulp.task("scripts", ["lint"], function() {
@@ -25,7 +26,7 @@ gulp.task("scripts", ["lint"], function() {
         .pipe(concat("scripts.js"))
         .pipe(stripDebug())
         .pipe(uglify())
-        .pipe(gulp.dest("dist/js/"));
+        .pipe(gulp.dest("dist/js"));
 });
 
 gulp.task("lint", function() {
@@ -45,12 +46,16 @@ gulp.task("copy", ["clean"], function() {
     }).pipe(gulp.dest("dist"));
 });
 
-gulp.task("watch", ["default"], function() {
-    livereload.listen();
-    gulp.watch(["src/scss/**/*.scss", "src/scss/**/*.css"], ["styles"]);
-    gulp.watch("src/js/**/*.js", ["scripts"]);
+gulp.task("images", function() {
+    return gulp.src("src/img/**/*.{png,jpg,jpeg,gif,svg}")
+        .pipe(imagemin())
+        .pipe(gulp.dest("dist/img"));
 });
 
-// TODO: image optimization
+gulp.task("watch", ["default"], function() {
+    livereload.listen();
+    gulp.watch(["src/scss/**/*.{scss,css}"], ["styles"]);
+    gulp.watch("src/js/**/*.js", ["scripts"]);
+});
 
 gulp.task("default", ["copy", "styles", "scripts"]);
