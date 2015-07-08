@@ -1,22 +1,31 @@
 {
   "name": "base-project",
+  "version": "2.0.0",
   "description": "Base files and structure for web projects.",
-  "version": "0.1.0",
-  "homepage": "https://github.com/lgraubner/base-project",
-  "license": "MIT",
   "author": "Lars Graubner <mail@larsgraubner.de>",
+  "homepage": "https://github.com/lgraubner/base-project",
   "repository": {
     "type": "git",
     "url": "https://github.com/lgraubner/base-project.git"
   },
-  "private": true,
+  "bugs": {
+      "url": "https://github.com/lgraubner/base-project/issues"
+  },
+  "dependencies": {
+    "jquery": ">=1.9.0"
+  },
   "devDependencies": {
-      "gulp": "^3.8.11",
-      "gulp-concat": "^2.5.2",
-      "gulp-sass": "^2.0.1",
-      "gulp-uglify": "^1.2.0",
-      "gulp-autoprefixer": "^2.3.0",
-      "gulp-minify-css": "^1.1.1",
-      "gulp-sourcemaps": "^1.5.2"
-  }
+    "gulp": "~3.9.0",
+    "gulp-uglify": "~1.2.0",
+    "gulp-rename": "~1.2.2",
+    "gulp-strip-debug": "~1.0.2",
+    "gulp-jshint": "~1.11.2",
+    "jshint-stylish": "~2.0.1",
+    "gulp-browserify": "~0.5.1",
+    "gulp-minify-css": "~1.2.0",
+    "gulp-clean": "~0.3.1",
+    "gulp-sass": "~2.0.3",
+    "gulp-concat": "~2.6.0"
+  },
+  "license": "MIT"
 }
