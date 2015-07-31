@@ -1,6 +1,6 @@
 {
   "name": "base-project",
-  "version": "3.0.0",
+  "version": "3.1.1",
   "description": "Base files and structure for web projects.",
   "author": "Lars Graubner <mail@larsgraubner.de>",
   "homepage": "https://github.com/lgraubner/base-project",
