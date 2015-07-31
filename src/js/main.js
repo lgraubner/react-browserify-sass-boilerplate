@@ -1,15 +1,21 @@
 (function(window, document, $, undefined) {
     "use strict";
 
-    var app = {
+    var site = {
+
+        addJSClass: function() {
+            if (typeof window.Modernizr === "undefined") {
+                $("html").removeClass("no-js").addClass("js");
+            }
+        },
 
         init: function() {
-
+            this.addJSClass();
         }
     };
 
     $(function() {
-        app.init();
+        site.init();
     });
 
-})(this, document, jQuery);
+})(window, document, jQuery);
