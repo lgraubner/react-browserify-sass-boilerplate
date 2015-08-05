@@ -7,7 +7,7 @@ var es = require("event-stream");
 var isProduction = true;
 
 var changeEvent = function(evt) {
-	$.util.log('File', $.util.colors.cyan(evt.path.replace(new RegExp('/.*(?=/src)/'), '')), 'was', $.util.colors.magenta(evt.type));
+    $.util.log('File', $.util.colors.cyan(evt.path.replace(new RegExp('/.*(?=/src)/'), '')), 'was', $.util.colors.magenta(evt.type));
 };
 
 gulp.task("styles", function() {
@@ -27,9 +27,11 @@ gulp.task("styles", function() {
 });
 
 gulp.task("scripts", ["lint"], function() {
-    return gulp.src("src/js/**/*.js")
+    var babel = gulp.src(["src/js/**/*.js", "!src/js/vendor/**/*.js"])
+        .pipe($.babel());
+
+    return es.concat(gulp.src("src/js/vendor/**/*.js"), babel)
         .pipe($.concat("scripts.js"))
-        .pipe($.babel())
         .pipe(isProduction ? $.uglify() : $.util.noop())
         .pipe($.size())
         .pipe(gulp.dest("dist/js"))
@@ -66,12 +68,15 @@ gulp.task("build", ["copy", "styles", "scripts", "images"], function() {
     return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
-gulp.task("watch", ["default"], function() {
+gulp.task("serve", ["default",  "watch"], function() {
     browserSync.init({
         server: {
             baseDir: "./dist/"
         }
     });
+});
+
+gulp.task("watch", function() {
 
     gulp.watch(["src/css/**/*.{scss,css}"], ["styles"]).on("change", function(evt) {
         changeEvent(evt);
@@ -90,6 +95,13 @@ gulp.task("watch", ["default"], function() {
     gulp.watch("src/*.html", ["copy"]).on("change", function(evt) {
         changeEvent(evt);
     });
+});
+
+gulp.task("test", function() {
+    return gulp.src("test/runner.html")
+        .pipe($.mochaPhantomjs({
+            reporter: "spec"
+        }));
 });
 
 gulp.task("default", ["clean"], function() {
