@@ -1,8 +1,9 @@
-var gulp = require("gulp");
-var $ = require("gulp-load-plugins")();
-var browserSync = require("browser-sync").create();
-var del = require("del");
-var es = require("event-stream");
+import gulp from "gulp";
+import del from "del";
+import es from "event-stream";
+
+const $ = require("gulp-load-plugins")();
+const browserSync = require("browser-sync").create();
 
 var isProduction = true;
 
@@ -10,7 +11,7 @@ var changeEvent = function(evt) {
     $.util.log('File', $.util.colors.cyan(evt.path.replace(new RegExp('/.*(?=/src)/'), '')), 'was', $.util.colors.magenta(evt.type));
 };
 
-gulp.task("styles", function() {
+gulp.task("styles", () => {
     var sassFiles = gulp.src("src/css/scss/main.scss")
         .pipe($.sass())
         .on("error", function(err) {
@@ -26,7 +27,7 @@ gulp.task("styles", function() {
         .pipe(browserSync.stream());
 });
 
-gulp.task("scripts", ["lint"], function() {
+gulp.task("scripts", ["lint"], () => {
     var babel = gulp.src(["src/js/**/*.js", "!src/js/vendor/**/*.js"])
         .pipe($.babel());
 
@@ -38,7 +39,7 @@ gulp.task("scripts", ["lint"], function() {
         .pipe(browserSync.stream());
 });
 
-gulp.task("lint", function() {
+gulp.task("lint", () => {
     return gulp.src("src/**/*.js")
         .pipe($.jshint({
             "esnext": true
@@ -46,17 +47,17 @@ gulp.task("lint", function() {
         .pipe($.jshint.reporter("jshint-stylish"));
 });
 
-gulp.task("clean", function() {
+gulp.task("clean", () => {
     del(["dist/*"]);
 });
 
-gulp.task("copy", function() {
+gulp.task("copy", () => {
     return gulp.src(["src/**/*", "!src/js", "!src/js/**/*", "!src/css", "!src/css/**/*", "!src/**/.DS_Store", "!src/img", "!src/img/**/*"], {
         base: "src"
     }).pipe(gulp.dest("dist"));
 });
 
-gulp.task("images", function() {
+gulp.task("images", () => {
     return gulp.src("src/img/**/*.{png,jpg,jpeg,gif,svg}")
         .pipe($.changed("dist/img"))
         .pipe($.imagemin())
@@ -64,11 +65,11 @@ gulp.task("images", function() {
         .pipe(gulp.dest("dist/img"));
 });
 
-gulp.task("build", ["copy", "styles", "scripts", "images"], function() {
+gulp.task("build", ["copy", "styles", "scripts", "images"], () => {
     return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
-gulp.task("serve", ["default",  "watch"], function() {
+gulp.task("serve", ["default",  "watch"], () => {
     browserSync.init({
         server: {
             baseDir: "./dist/"
@@ -76,34 +77,34 @@ gulp.task("serve", ["default",  "watch"], function() {
     });
 });
 
-gulp.task("watch", function() {
+gulp.task("watch", () => {
 
-    gulp.watch(["src/css/**/*.{scss,css}"], ["styles"]).on("change", function(evt) {
+    gulp.watch(["src/css/**/*.{scss,css}"], ["styles"]).on("change", (evt) => {
         changeEvent(evt);
         browserSync.reload();
     });
 
-    gulp.watch("src/js/**/*.js", ["scripts"]).on("change", function(evt) {
+    gulp.watch("src/js/**/*.js", ["scripts"]).on("change", (evt) => {
         changeEvent(evt);
         browserSync.reload();
     });
 
-    gulp.watch("src/img/**/*.{png,jpg,jpeg,gif,svg}", ["images"]).on("change", function(evt) {
+    gulp.watch("src/img/**/*.{png,jpg,jpeg,gif,svg}", ["images"]).on("change", (evt) => {
         changeEvent(evt);
     });
 
-    gulp.watch("src/*.html", ["copy"]).on("change", function(evt) {
+    gulp.watch("src/*.html", ["copy"]).on("change", (evt) => {
         changeEvent(evt);
     });
 });
 
-gulp.task("test", function() {
+gulp.task("test", () => {
     return gulp.src("test/runner.html")
         .pipe($.mochaPhantomjs({
             reporter: "spec"
         }));
 });
 
-gulp.task("default", ["clean"], function() {
+gulp.task("default", ["clean"], () => {
     gulp.start("build");
 });

@@ -1,6 +1,6 @@
 {
   "name": "base-project",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Base files and structure for web projects.",
   "author": "Lars Graubner <mail@larsgraubner.de>",
   "homepage": "https://github.com/lgraubner/base-project",
@@ -9,30 +9,31 @@
     "url": "https://github.com/lgraubner/base-project.git"
   },
   "bugs": {
-      "url": "https://github.com/lgraubner/base-project/issues"
+    "url": "https://github.com/lgraubner/base-project/issues"
   },
   "dependencies": {
     "jquery": ">=1.9.0"
   },
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-uglify": "^1.2.0",
-    "gulp-minify-css": "^1.2.0",
-    "gulp-sass": "^2.0.3",
-    "gulp-concat": "^2.6.0",
-    "gulp-autoprefixer": "^2.3.1",
-    "gulp-imagemin": "^2.3.0",
-    "gulp-load-plugins": "^0.10.0",
-    "gulp-util": "^3.0.6",
-    "gulp-size": "^1.2.3",
-    "gulp-babel": "^5.1.0",
-    "gulp-changed": "^1.2.1",
-    "gulp-mocha-phantomjs": "^0.8.1",
-    "gulp-jshint": "^1.11.2",
-    "jshint-stylish": "^2.0.1",
+    "babel": "^5.8.21",
     "browser-sync": "^2.8.1",
     "del": "^1.2.0",
     "event-stream": "^3.3.1",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-babel": "^5.1.0",
+    "gulp-changed": "^1.2.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-imagemin": "^2.3.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-load-plugins": "^0.10.0",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-mocha-phantomjs": "^0.8.1",
+    "gulp-sass": "^2.0.3",
+    "gulp-size": "^1.2.3",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "jshint-stylish": "^2.0.1",
     "mocha": "^2.2.5",
     "should": "^7.0.2"
   },
