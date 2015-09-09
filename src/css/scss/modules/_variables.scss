@@ -11,11 +11,12 @@ $bp-desktop: 1024px;
  * Colors
  */
 
+$color-primary: blue;
+$color-text: #000;
 
 /**
  * Fonts
  */
 
-$base-font-size: 14px;
-$base-font-color: #222;
-$base-font-stack: Helvetica, Arial, sans-serif;
+$font-size: 14px;
+$font-primary: Helvetica, Arial, sans-serif;

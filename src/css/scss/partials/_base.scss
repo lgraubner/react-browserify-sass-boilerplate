@@ -7,10 +7,10 @@ html {
 }
 
 body {
-    font-family: $base-font-stack;
-    font-size: $base-font-size;
+    font-family: $font-primary;
+    font-size: $font-size;
     font-weight: 400;
-    color: $base-font-color;
+    color: $color-text;
 }
 
 .clearfix {
