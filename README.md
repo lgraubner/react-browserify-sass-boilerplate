@@ -1,11 +1,17 @@
-# Base project
+# Base frontend template
 
-## CSS
+## Features
 
-## Javascript
+## Get started
 
-## Workflow
+To get started install the dependencies.
 
 ```BASH
-gulp watch
+$ npm install
+```
+
+Start gulp and it will watch for changes and builds right away. Your browser will be refreshed automatically by Browsersync.
+
+```BASH
+$ gulp serve
 ```
