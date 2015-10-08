@@ -68,10 +68,20 @@ $ gulp serve
 
 You can also use Gulp tasks directly if you don't want to let Gulp watch your changes or avoid automatically refreshing your browser.
 
+**default**
+
+The default task cleans the  `dist` folder and builds all files from scratch.
+
 **test**
 
-*This task will not run automatically as it can slow down your working machine and disturb your workflow.*
+Your Javascript code should be tested. By calling `$ gulp test` a headless phantom.js Browser will start and mocha will execute all tests inside the `test` folder.
+
+*The test task will not run automatically as it can slow down your working machine and disturb your workflow.*
 
 **watch**
 
+This task will watch all files for changes and execute the corresponding task to handle the files.
+
 **serve**
+
+For a nice workflow use this task. It will build all files from scratch, watch for changes and start a webserver, syncing with your browser.
