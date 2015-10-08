@@ -18,7 +18,7 @@ gulp.task("styles", () => {
             new $.util.PluginError("styles", err, { showStack: true });
         });
 
-    return es.concat(gulp.src("src/css/vendor/**/*.css"), sassFiles)
+    return es.concat(gulp.src(["src/css/vendor/**/*.css", "src/css/**/*.css"]), sassFiles)
         .pipe($.concat("styles.css"))
         .pipe($.autoprefixer())
         .pipe(isProduction ? $.minifyCss() : $.util.noop())
