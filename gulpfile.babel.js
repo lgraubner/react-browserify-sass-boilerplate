@@ -11,31 +11,48 @@ var changeEvent = function(evt) {
     $.util.log('File', $.util.colors.cyan(evt.path.replace(new RegExp('/.*(?=/src)/'), '')), 'was', $.util.colors.magenta(evt.type));
 };
 
+var paths = {
+    styles: {
+        src: ["src/css/vendor/**/*.css", "src/css/**/*.css"],
+        sassSrc: "src/css/scss/main.scss",
+        dest: "dist/css"
+    },
+    scripts: {
+        src: ["src/js/**/*.js", "!src/js/vendor/**/*.js"],
+        vendorSrc: "src/js/vendor/**/*.js",
+        dest: "dist/js"
+    },
+    images: {
+        src: "src/img/**/*.{png,jpg,jpeg,gif,svg}",
+        dest: "dist/img"
+    }
+};
+
 gulp.task("styles", () => {
-    var sassFiles = gulp.src("src/css/scss/main.scss")
+    var sassFiles = gulp.src(paths.styles.sassSrc)
         .pipe($.sass())
         .on("error", function(err) {
             new $.util.PluginError("styles", err, { showStack: true });
         });
 
-    return es.concat(gulp.src(["src/css/vendor/**/*.css", "src/css/**/*.css"]), sassFiles)
+    return es.concat(gulp.src(paths.styles.src), sassFiles)
         .pipe($.concat("styles.css"))
         .pipe($.autoprefixer())
         .pipe(isProduction ? $.minifyCss() : $.util.noop())
         .pipe($.size())
-        .pipe(gulp.dest("dist/css"))
+        .pipe(gulp.dest(paths.styles.dest))
         .pipe(browserSync.stream());
 });
 
 gulp.task("scripts", ["lint"], () => {
-    var babel = gulp.src(["src/js/**/*.js", "!src/js/vendor/**/*.js"])
+    var babel = gulp.src(paths.scripts.src)
         .pipe($.babel());
 
-    return es.concat(gulp.src("src/js/vendor/**/*.js"), babel)
+    return es.concat(gulp.src(paths.scripts.vendorSrc), babel)
         .pipe($.concat("scripts.js"))
         .pipe(isProduction ? $.uglify() : $.util.noop())
         .pipe($.size())
-        .pipe(gulp.dest("dist/js"))
+        .pipe(gulp.dest(paths.scripts.dest))
         .pipe(browserSync.stream());
 });
 
@@ -58,11 +75,11 @@ gulp.task("copy", () => {
 });
 
 gulp.task("images", () => {
-    return gulp.src("src/img/**/*.{png,jpg,jpeg,gif,svg}")
-        .pipe($.changed("dist/img"))
+    return gulp.src(paths.images.src)
+        .pipe($.changed(paths.images.dest))
         .pipe($.imagemin())
         .pipe($.size())
-        .pipe(gulp.dest("dist/img"));
+        .pipe(gulp.dest(paths.images.dest));
 });
 
 gulp.task("build", ["copy", "styles", "scripts", "images"], () => {
