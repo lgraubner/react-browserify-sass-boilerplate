@@ -4,6 +4,8 @@ This template is a starting point for the frontend part of your project. You can
 
 ## Features
 
+The following features will help you to have a great workflow and develop easy and fast.
+
 ### Automated building with Gulp
 
 For an easy workflow [Gulp](http://gulpjs.com/) builds automatically right away while your are coding. This includes the following tasks:
