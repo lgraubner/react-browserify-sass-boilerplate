@@ -6,24 +6,30 @@ This template is a starting point for the frontend part of your project. You can
 
 ### Automated building with Gulp
 
-For an easy workflow Gulp builds automatically right away while your are coding. This includes the following tasks:
+For an easy workflow [Gulp](http://gulpjs.com/) builds automatically right away while your are coding. This includes the following tasks:
 
 - Converting SASS, combining CSS files, minifying styles
-- Linting Javscript, combining Javscript files, converting ES6 features to ES5 and minifying it
+- Linting Javscript, combining Javscript files, converting ES2015 features to ES5 and minifying it
 - Optimizing images for the web
 - Watching for file changes and refreshing your browser
 
-The `gulpfile.babel.js` is using ES6 syntax.
+The `gulpfile.babel.js` is using ES2015 syntax.
 
 #### Styles
 
+For this package [SASS](http://sass-lang.com/) is used as CSS preprocessor. Gulp will process your sass files and combine them with other regular CSS files. Autoprefixer takes care of browser specific vendor prefixes, so you don't have to worry about it. All your CSS gets minified to reduce the file size.
+
 #### Javascript
+
+This setup is ES2015 ready! You can write ES2015 code and [Babel](http://babeljs.io/) will compile it to ES5. You can benefit from new features and don't have to worry about browser support. Every change you make on your code will be linted to reveal possible problems. As last step all your Javascript files will be combined and minified to reduce file size and HTTP requests.
 
 #### Images
 
+To reduce the file size of your images `GIF`, `JPEG`, `PNG` and `SVG` files will be compressed by lossless optimizers.
+
 #### Tests
 
-#### Cache Busting
+Your Javascript code should be tested to make sure it works as expected. Write tests and [Mocha](https://mochajs.org/) will run them in a headless [PhantomJS](http://phantomjs.org/) browser. This way you can get instant feedback and discover errors early.
 
 ### Folder structure
 
