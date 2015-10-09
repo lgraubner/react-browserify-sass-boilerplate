@@ -96,7 +96,7 @@ gulp.task("serve", ["default",  "watch"], () => {
 
 gulp.task("watch", () => {
 
-    gulp.watch(["src/css/**/*.{scss,css}"], ["styles"]).on("change", (evt) => {
+    gulp.watch("src/css/**/*.{scss,css}", ["styles"]).on("change", (evt) => {
         changeEvent(evt);
         browserSync.reload();
     });
