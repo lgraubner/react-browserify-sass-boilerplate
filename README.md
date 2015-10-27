@@ -1,5 +1,7 @@
 # Base frontend template
 
+[![David Dev](https://img.shields.io/david/dev/lgraubner/base-frontend-template.svg)](https://david-dm.org/lgraubner/base-frontend-template#info=devDependencies)
+
 This template is a starting point for the frontend part of your project. You can modify and extend this to your needs.
 
 ## Features
