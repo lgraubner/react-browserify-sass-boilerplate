@@ -3,6 +3,7 @@ html {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
+    font-size: 100%;
 }
 
 *, *:after, *:before {
@@ -11,13 +12,12 @@ html {
 
 body {
     font-family: $font-primary;
-    font-size: $font-size;
+    @include font-size($font-size);
     font-weight: 400;
     color: $color-text;
 }
 
 .clearfix {
-
     &:before,
     &:after {
         display: table;
@@ -29,19 +29,13 @@ body {
     }
 }
 
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
 a {
     text-decoration: none;
-}
 
-img {
-    height: auto;
-    max-width: 100%;
+    &[href^="tel:"] {
+        color: $color-text;
+        cursor: default;
+    }
 }
 
 button {
@@ -57,7 +51,7 @@ button {
 input,
 textarea {
     @extend button;
-    font-size: 16px;
+    @include font-size(16px);
 }
 
 input[type="checkbox"] {
@@ -77,9 +71,40 @@ input[type="checkbox"] {
     width: 1px
 }
 
-a[href^="tel:"] {
-    text-decoration: none;
-    color: $color-text;
-    cursor: default;
-    border: none !important;
+.float_left {
+    float: left;
+}
+
+.float_right {
+    float: right;
+}
+
+.img-repsonsive {
+    height: auto;
+    max-width: 100%;
+    display: block;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
 }
