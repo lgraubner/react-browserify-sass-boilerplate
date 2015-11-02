@@ -1,10 +1,16 @@
-@mixin prefix($property, $value, $vendors: webkit moz ms o) {
-    @if $vendors {
-        @each $vendor in $vendors {
-            #{"-" + $vendor + "-" + $property}: #{$value};
+/// Mixin to prefix several properties at once
+/// @author Hugo Giraudel
+/// @param {Map} $declarations - Declarations to prefix
+/// @param {List} $prefixes (()) - List of prefixes to print
+@mixin prefix($declarations, $prefixes: webkit moz ms o {
+    @each $property, $value in $declarations {
+        @each $prefix in $prefixes {
+            #{'-' + $prefix + '-' + $property}: $value;
         }
+
+        // Output standard non-prefixed declaration
+        #{$property}: $value;
     }
-    #{$property}: #{$value};
 }
 
 @function calculateRem($size) {
