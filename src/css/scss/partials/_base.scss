@@ -17,18 +17,6 @@ body {
     color: $color-text;
 }
 
-.clearfix {
-    &:before,
-    &:after {
-        display: table;
-        content: " ";
-    }
-
-    &:after {
-        clear: both;
-    }
-}
-
 a {
     text-decoration: none;
 
@@ -58,53 +46,4 @@ input[type="checkbox"] {
     -webkit-appearance: checkbox;
     -moz-appearance: checkbox;
     appearance: checkbox;
-}
-
-.invisible {
-    border: 0;
-    clip:rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px
-}
-
-.float_left {
-    float: left;
-}
-
-.float_right {
-    float: right;
-}
-
-.img-repsonsive {
-    height: auto;
-    max-width: 100%;
-    display: block;
-}
-
-.hidden {
-    display: none !important;
-}
-
-.visible {
-    display: block !important;
-}
-
-.text-right {
-    text-align: right;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.text-justify {
-    text-align: justify;
-}
-
-.text-uppercase {
-    text-transform: uppercase;
 }
