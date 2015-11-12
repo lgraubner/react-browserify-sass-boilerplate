@@ -17,8 +17,6 @@ For an easy workflow [Gulp](http://gulpjs.com/) builds automatically right away 
 - Optimizing images for the web
 - Watching for file changes and refreshing your browser
 
-The `gulpfile.babel.js` is using ES2015 syntax.
-
 #### Styles
 
 For this package [SASS](http://sass-lang.com/) is used as CSS preprocessor. Gulp will process your sass files and combine them with other regular CSS files. Autoprefixer takes care of browser specific vendor prefixes, so you don't have to worry about it. All your CSS gets minified to reduce the file size.
