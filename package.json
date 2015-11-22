@@ -3,9 +3,9 @@
   "version": "3.5.1",
   "description": "Base structure and files for frontend templates.",
   "author": {
-      "name": "Lars Graubner",
-      "email": "mail@larsgraubner.de",
-      "url": "http://larsgraubner.de"
+    "name": "Lars Graubner",
+    "email": "mail@larsgraubner.de",
+    "url": "http://larsgraubner.de"
   },
   "homepage": "https://github.com/lgraubner/base-frontend-template",
   "repository": {
@@ -19,10 +19,11 @@
     "jquery": ">=1.9.0"
   },
   "devDependencies": {
-    "babel-core": "^6.1.4",
-    "babel-preset-es2015": "^6.1.4",
+    "babel-core": "^6.2.1",
+    "babel-preset-es2015": "^6.1.18",
     "browser-sync": "^2.10.0",
-    "del": "^2.0.2",
+    "chai": "^3.4.1",
+    "del": "^2.1.0",
     "event-stream": "^3.3.2",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
@@ -30,23 +31,23 @@
     "gulp-changed": "^1.3.0",
     "gulp-concat": "^2.6.0",
     "gulp-imagemin": "^2.4.0",
-    "gulp-jshint": "^1.12.0",
-    "gulp-load-plugins": "^1.0.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-load-plugins": "^1.1.0",
     "gulp-minify-css": "^1.2.1",
     "gulp-mocha-phantomjs": "^0.10.1",
     "gulp-sass": "^2.1.0",
     "gulp-size": "^2.0.0",
-    "gulp-uglify": "^1.4.2",
+    "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
-    "jshint-stylish": "^2.0.1",
-    "mocha": "^2.3.3",
-    "chai": "^3.4.1"
+    "jshint": "^2.8.0",
+    "jshint-stylish": "^2.1.0",
+    "mocha": "^2.3.4"
   },
   "license": "MIT",
   "scripts": {
-      "build": "gulp",
-      "clean": "gulp clean",
-      "start": "gulp serve"
+    "build": "gulp",
+    "clean": "gulp clean",
+    "start": "gulp serve"
   },
   "private": true
 }
