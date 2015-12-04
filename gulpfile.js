@@ -119,7 +119,7 @@ gulp.task("watch", function() {
     });
 });
 
-gulp.task("test", function() {
+gulp.task("test", ["build"], function() {
     return gulp.src("test/runner.html")
         .pipe($.mochaPhantomjs({
             reporter: "spec"
@@ -127,5 +127,5 @@ gulp.task("test", function() {
 });
 
 gulp.task("default", ["clean"], function() {
-    gulp.start("build");
+    gulp.start("test");
 });
