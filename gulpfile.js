@@ -90,4 +90,38 @@ gulp.task("serve", ["watch"], () => {
     });
 });
 
+<<<<<<< HEAD
 gulp.task("default", ["serve"]);
+=======
+gulp.task("watch", function() {
+
+    gulp.watch("src/css/**/*.{scss,css}", ["styles"]).on("change", function(evt) {
+        changeEvent(evt);
+        browserSync.reload();
+    });
+
+    gulp.watch("src/js/**/*.js", ["scripts"]).on("change", function(evt) {
+        changeEvent(evt);
+        browserSync.reload();
+    });
+
+    gulp.watch("src/img/**/*.{png,jpg,jpeg,gif,svg}", ["images"]).on("change", function(evt) {
+        changeEvent(evt);
+    });
+
+    gulp.watch("src/*.html", ["copy"]).on("change", function(evt) {
+        changeEvent(evt);
+    });
+});
+
+gulp.task("test", ["build"], function() {
+    return gulp.src("test/runner.html")
+        .pipe($.mochaPhantomjs({
+            reporter: "spec"
+        }));
+});
+
+gulp.task("default", ["clean"], function() {
+    gulp.start("test");
+});
+>>>>>>> origin/master
