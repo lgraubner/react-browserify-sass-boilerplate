@@ -1,131 +1,93 @@
-'use strict';
+"use strict";
 
-var gulp = require("gulp");
-var del = require("del");
-var es = require("event-stream");
+const gulp = require("gulp");
 
-var $ = require("gulp-load-plugins")();
-var browserSync = require("browser-sync").create();
+const $ = require("gulp-load-plugins")();
+const browserSync = require("browser-sync").create();
+const watchify = require("watchify");
+const browserify = require("browserify");
+const source = require('vinyl-source-stream');
 
-var isProduction = true;
+const assign = require('lodash/object/assign');
 
-var changeEvent = function(evt) {
-    $.util.log('File', $.util.colors.cyan(evt.path.replace(new RegExp('/.*(?=/src)/'), '')), 'was', $.util.colors.magenta(evt.type));
+const isProduction = true;
+
+const dirs = {
+    src: 'src',
+    dest: 'build'
 };
 
-var paths = {
-    styles: {
-        src: ["src/css/vendor/**/*.css", "src/css/**/*.css"],
-        sassSrc: "src/css/scss/main.scss",
-        dest: "dist/css"
-    },
-    scripts: {
-        src: ["src/js/**/*.js", "!src/js/vendor/**/*.js"],
-        vendorSrc: "src/js/vendor/**/*.js",
-        dest: "dist/js"
-    },
-    images: {
-        src: "src/img/**/*.{png,jpg,jpeg,gif,svg}",
-        dest: "dist/img"
-    }
+const sassPaths = {
+    src: `${dirs.src}/css/scss/main.scss`,
+    dest: `${dirs.dest}/css/`
 };
 
-gulp.task("styles", function() {
-    var sassFiles = gulp.src(paths.styles.sassSrc)
-        .pipe($.sass())
+const scriptPaths = {
+    src: `${dirs.src}/js/**/*.js`,
+    dest: `${dirs.dest}/js/`
+}
+
+var b = watchify(browserify(assign({}, watchify.args, {
+    entries: `${dirs.src}/js/main.js`,
+    debug: isProduction
+})));
+
+b.transform("babelify", {presets: ["es2015"]})
+    .transform({
+        global: true
+    }, "uglifyify");
+
+b.on("update", bundle);
+b.on("log", $.util.log);
+
+function bundle() {
+    return b.bundle()
         .on("error", function(err) {
-            new $.util.PluginError("styles", err, { showStack: true });
-        });
+            $.util.log(err.message)
+            browserSync.notify("Browserify Error!");
+            this.emit("end");
+        })
+        .pipe(source("scripts.js"))
+        .pipe(gulp.dest(scriptPaths.dest))
+        .pipe(browserSync.stream({once: true}));
+}
 
-    return es.concat(gulp.src(paths.styles.src), sassFiles)
-        .pipe($.concat("styles.css"))
+gulp.task("styles", () => {
+    return gulp.src(sassPaths.src)
+        .pipe($.sourcemaps.init())
+        .pipe($.sass().on("error", $.sass.logError))
         .pipe($.autoprefixer())
         .pipe(isProduction ? $.minifyCss() : $.util.noop())
-        .pipe($.size())
-        .pipe(gulp.dest(paths.styles.dest))
+        .pipe($.sourcemaps.write("./"))
+        .pipe($.rename(function(path) {
+            path.basename = "styles"
+        }))
+        .pipe(gulp.dest(sassPaths.dest))
         .pipe(browserSync.stream());
 });
 
-gulp.task("scripts", ["lint"], function() {
-    var babel = gulp.src(paths.scripts.src)
-        .pipe($.babel({
-            presets: ["babel-preset-es2015"]
-        }));
-
-    return es.concat(gulp.src(paths.scripts.vendorSrc), babel)
-        .pipe($.concat("scripts.js"))
-        .pipe(isProduction ? $.uglify() : $.util.noop())
-        .pipe($.size())
-        .pipe(gulp.dest(paths.scripts.dest))
-        .pipe(browserSync.stream());
-});
-
-gulp.task("lint", function() {
-    return gulp.src("src/**/*.js")
+gulp.task("lint", () => {
+    return gulp.src(`${dirs.src}/js/**/*.js`)
         .pipe($.jshint({
             "esnext": true
         }))
         .pipe($.jshint.reporter("jshint-stylish"));
 });
 
-gulp.task("clean", function() {
-    del(["dist/*"]);
+gulp.task("scripts", ["lint"], bundle);
+
+gulp.task("watch", ["styles", "scripts"], () => {
+    gulp.watch(`${dirs.src}/css/scss/**/*.{scss,css}`, ["styles"]).on("change", () => {
+        browserSync.reload();
+    });
 });
 
-gulp.task("copy", function() {
-    return gulp.src(["src/**/*", "!src/js", "!src/js/**/*", "!src/css", "!src/css/**/*", "!src/**/.DS_Store", "!src/img", "!src/img/**/*"], {
-        base: "src"
-    }).pipe(gulp.dest("dist"));
-});
-
-gulp.task("images", function() {
-    return gulp.src(paths.images.src)
-        .pipe($.changed(paths.images.dest))
-        .pipe($.imagemin())
-        .pipe($.size())
-        .pipe(gulp.dest(paths.images.dest));
-});
-
-gulp.task("build", ["copy", "styles", "scripts", "images"], function() {
-    return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
-
-gulp.task("serve", ["default",  "watch"], function() {
+gulp.task("serve", ["watch"], () => {
     browserSync.init({
         server: {
-            baseDir: "./dist/"
+            baseDir: "./"
         }
     });
 });
 
-gulp.task("watch", function() {
-
-    gulp.watch("src/css/**/*.{scss,css}", ["styles"]).on("change", function(evt) {
-        changeEvent(evt);
-        browserSync.reload();
-    });
-
-    gulp.watch("src/js/**/*.js", ["scripts"]).on("change", function(evt) {
-        changeEvent(evt);
-        browserSync.reload();
-    });
-
-    gulp.watch("src/img/**/*.{png,jpg,jpeg,gif,svg}", ["images"]).on("change", function(evt) {
-        changeEvent(evt);
-    });
-
-    gulp.watch("src/*.html", ["copy"]).on("change", function(evt) {
-        changeEvent(evt);
-    });
-});
-
-gulp.task("test", function() {
-    return gulp.src("test/runner.html")
-        .pipe($.mochaPhantomjs({
-            reporter: "spec"
-        }));
-});
-
-gulp.task("default", ["clean"], function() {
-    gulp.start("build");
-});
+gulp.task("default", ["serve"]);
