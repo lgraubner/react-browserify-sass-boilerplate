@@ -76,7 +76,7 @@ gulp.task("lint", () => {
 
 gulp.task("scripts", ["lint"], bundle);
 
-gulp.task("default", () => {
+gulp.task("default", ["scripts", "styles"], () => {
 
     gulp.watch(`${dirs.src}/css/scss/**/*.{scss,css}`, ["styles"]).on("change", () => {
         browserSync.reload();
