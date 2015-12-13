@@ -25,7 +25,7 @@ const sassPaths = {
 const scriptPaths = {
     src: `${dirs.src}/js/**/*.js`,
     dest: `${dirs.dest}/js/`
-}
+};
 
 var b = watchify(browserify(assign({}, watchify.args, {
     entries: `${dirs.src}/js/main.js`,
@@ -43,7 +43,7 @@ b.on("log", $.util.log);
 function bundle() {
     return b.bundle()
         .on("error", function(err) {
-            $.util.log(err.message)
+            $.util.log(err.message);
             browserSync.notify("Browserify Error!");
             this.emit("end");
         })
@@ -60,7 +60,7 @@ gulp.task("styles", () => {
         .pipe(isProduction ? $.minifyCss() : $.util.noop())
         .pipe($.sourcemaps.write("./"))
         .pipe($.rename(function(path) {
-            path.basename = "styles"
+            path.basename = "styles";
         }))
         .pipe(gulp.dest(sassPaths.dest))
         .pipe(browserSync.stream());

@@ -1,3 +1,7 @@
 {
-    "esnext": true
+    "esnext": true,
+    "globals": {
+        "module": true,
+        "require": true
+    }
 }
