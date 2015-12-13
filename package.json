@@ -1,10 +1,6 @@
 {
   "name": "base-frontend-template",
-<<<<<<< HEAD
   "version": "4.0.0",
-=======
-  "version": "3.5.2",
->>>>>>> origin/master
   "description": "Base structure and files for frontend templates.",
   "author": {
     "name": "Lars Graubner",
