@@ -32,7 +32,7 @@ var b = watchify(browserify(assign({}, watchify.args, {
     debug: isProduction
 })));
 
-b.transform("babelify", {presets: ["es2015"]})
+b.transform("babelify", {presets: ["es2015", "react"]})
     .transform({
         global: true
     }, "uglifyify");
