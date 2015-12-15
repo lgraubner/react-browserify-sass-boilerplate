@@ -1,8 +1,6 @@
 # Base React, Browserify, SASS project
 
-[![David](https://img.shields.io/david/lgraubner/base-react-browserify-sass.svg)](https://david-dm.org/lgraubner/base-react-browserify-sass)
-
-[![David Dev](https://img.shields.io/david/dev/lgraubner/base-react-browserify-sass.svg)](https://david-dm.org/lgraubner/base-react-browserify-sass#info=devDependencies)
+[![David](https://img.shields.io/david/lgraubner/base-react-browserify-sass.svg)](https://david-dm.org/lgraubner/base-react-browserify-sass) [![David Dev](https://img.shields.io/david/dev/lgraubner/base-react-browserify-sass.svg)](https://david-dm.org/lgraubner/base-react-browserify-sass#info=devDependencies)
 
 This template is a starting point for the frontend part of your project using React and SASS. You can modify and extend this to your needs.
 
