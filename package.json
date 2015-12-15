@@ -1,22 +1,21 @@
 {
-  "name": "base-frontend-template",
-  "version": "4.0.0",
-  "description": "Base structure and files for frontend templates.",
+  "name": "base-react-browserify-sass",
+  "version": "0.1.0",
+  "description": "Base project using react, browserify, babel, gulp and sass.",
   "author": {
     "name": "Lars Graubner",
     "email": "mail@larsgraubner.de",
     "url": "http://larsgraubner.de"
   },
-  "homepage": "https://github.com/lgraubner/base-frontend-template",
+  "homepage": "https://github.com/lgraubner/base-react-browserify-sass",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lgraubner/base-frontend-template.git"
+    "url": "https://github.com/lgraubner/base-react-browserify-sass.git"
   },
   "bugs": {
-    "url": "https://github.com/lgraubner/base-frontend-template/issues"
+    "url": "https://github.com/lgraubner/base-react-browserify-sass/issues"
   },
   "dependencies": {
-    "jquery": "^2.1.4",
     "lodash": "^3.10.1",
     "normalize.css": "^3.0.3",
     "velocity-animate": "^1.2.3",
@@ -40,8 +39,6 @@
     "uglifyify": "^3.0.1",
     "gulp-util": "^3.0.7",
     "gulp-sourcemaps": "^1.6.0",
-    "jshint": "^2.8.0",
-    "jshint-stylish": "^2.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.6.1"
@@ -50,8 +47,5 @@
     "node": ">=4.0"
   },
   "license": "MIT",
-  "scripts": {
-    "start": "gulp"
-  },
   "private": true
 }

@@ -28,7 +28,7 @@ const scriptPaths = {
 };
 
 var b = watchify(browserify(assign({}, watchify.args, {
-    entries: `${dirs.src}/js/main.js`,
+    entries: `${dirs.src}/js/main.jsx`,
     debug: isProduction
 })));
 
@@ -52,6 +52,8 @@ function bundle() {
         .pipe(browserSync.stream({once: true}));
 }
 
+gulp.task("scripts", bundle);
+
 gulp.task("styles", () => {
     return gulp.src(sassPaths.src)
         .pipe($.sourcemaps.init())
@@ -65,16 +67,6 @@ gulp.task("styles", () => {
         .pipe(gulp.dest(sassPaths.dest))
         .pipe(browserSync.stream());
 });
-
-gulp.task("lint", () => {
-    return gulp.src(`${dirs.src}/js/**/*.js`)
-        .pipe($.jshint({
-            "esnext": true
-        }))
-        .pipe($.jshint.reporter("jshint-stylish"));
-});
-
-gulp.task("scripts", ["lint"], bundle);
 
 gulp.task("default", ["scripts", "styles"], () => {
 
