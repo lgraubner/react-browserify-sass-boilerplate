@@ -1,8 +1,10 @@
-# Base frontend template
+# Base React, Browserify, SASS project
 
-[![David Dev](https://img.shields.io/david/dev/lgraubner/base-frontend-template.svg)](https://david-dm.org/lgraubner/base-frontend-template#info=devDependencies)
+[![David](https://img.shields.io/david/lgraubner/base-react-browserify-sass.svg)](https://david-dm.org/lgraubner/base-react-browserify-sass)
 
-This template is a starting point for the frontend part of your project. You can modify and extend this to your needs.
+[![David Dev](https://img.shields.io/david/dev/lgraubner/base-react-browserify-sass.svg)](https://david-dm.org/lgraubner/base-react-browserify-sass#info=devDependencies)
+
+This template is a starting point for the frontend part of your project using React and SASS. You can modify and extend this to your needs.
 
 ## Features
 
@@ -22,11 +24,11 @@ For this package [SASS](http://sass-lang.com/) is used as CSS preprocessor. Gulp
 
 #### Javascript
 
-This setup is ES2015 ready! You can write ES2015 code and [Babel](http://babeljs.io/) will compile it to ES5. You can benefit from new features and don't have to worry about browser support. Every change you make on your code will be linted to reveal possible problems. As last step all your Javascript files will be combined and minified to reduce file size and HTTP requests.
+This setup is ES2015 ready! You can write ES2015 code and [Babel](http://babeljs.io/) will compile it to ES5. You can benefit from new features and don't have to worry about browser support. Every change you make on your code will be linted to reveal possible problems. As last step all your Javascript files will be combined and minified to reduce file size and HTTP requests using Browserify.
 
 ### Folder structure
 
-You should only work in the `src` folder. All processed files will be placed into `dist`. Use this for production and upload it to your live environment, or directly link to it. The third folder `test` should contain any tests you are running to evaluate your Javascript code.
+You should only work in the `src` folder. All processed files will be placed into `build`. Use this for production and upload it to your live environment, or directly link to it.
 
 ```
 /src
@@ -35,16 +37,13 @@ You should only work in the `src` folder. All processed files will be placed int
 |   |   |-- components
 |   |   |-- modules
 |   |   `-- partials
-|   `-- vendor
 `-- js
-    `--vendor
+    `--components
 ```
 
-The `src` folder contains an `css` and `js` folder. If you are using SASS place it in the `scss` folder. Gulp will search for a `main.scss` file to process it, so make sure you include all your SASS components inside it. Put CSS files in the `css` folder or organize it in subfolders. Third party files should be placed inside the vendor folder. All files have to be referenced in the `main.scss` file.
+The `src` folder contains an `css` and `js` folder. If you are using SASS place it in the `scss` folder. Gulp will search for a `main.scss` file to process it, so make sure you include all your SASS components inside it. Put CSS files in the `css` folder or organize it in subfolders. Third party files should be placed inside the vendor folder. All files have to be referenced in the `main.scss` file!
 
-All of your Javscript files should be in the `js` folder or subfolders. Third party libraries belong inside the `vendor` folder.
-
-Any other folders and files inside the `src` folder will be copied to the `dist` folder without any changes.
+All of your Javscript files should be in the `js` folder or subfolders. Get third party plugins via npm and include them right away.
 
 ## Get started
 

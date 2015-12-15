@@ -6,35 +6,40 @@ const $ = require("gulp-load-plugins")();
 const browserSync = require("browser-sync").create();
 const watchify = require("watchify");
 const browserify = require("browserify");
-const source = require('vinyl-source-stream');
+const source = require("vinyl-source-stream");
+const exorcist = require("exorcist");
 
-const assign = require('lodash/object/assign');
+const _ = {
+    assign: require("lodash/object/assign")
+};
+const path = require("path");
 
 const isProduction = true;
 
 const dirs = {
-    src: 'src',
-    dest: 'build'
+    src: path.join(__dirname, 'src'),
+    dest: path.join(__dirname, 'build')
 };
 
 const sassPaths = {
-    src: `${dirs.src}/css/scss/main.scss`,
-    dest: `${dirs.dest}/css/`
+    src: path.join(dirs.src, "/css/scss/main.scss"),
+    dest: path.join(dirs.dest, "/css/")
 };
 
 const scriptPaths = {
-    src: `${dirs.src}/js/**/*.js`,
-    dest: `${dirs.dest}/js/`
+    src: path.join(dirs.src, "/js/**/*.js"),
+    dest: path.join(dirs.dest, "/js/"),
+    map: path.join(dirs.dest, "/js/scripts.js.map")
 };
 
-var b = watchify(browserify(assign({}, watchify.args, {
-    entries: `${dirs.src}/js/main.jsx`,
-    debug: isProduction
+var b = watchify(browserify(_.assign({}, watchify.args, {
+    entries: path.join(dirs.src, "/js/main.jsx"),
+    debug: true
 })));
 
 b.transform("babelify", {presets: ["es2015", "react"]})
     .transform({
-        global: true
+        global: true,
     }, "uglifyify");
 
 b.on("update", bundle);
@@ -47,6 +52,7 @@ function bundle() {
             browserSync.notify("Browserify Error!");
             this.emit("end");
         })
+        .pipe(exorcist(scriptPaths.map))
         .pipe(source("scripts.js"))
         .pipe(gulp.dest(scriptPaths.dest))
         .pipe(browserSync.stream({once: true}));
@@ -60,10 +66,10 @@ gulp.task("styles", () => {
         .pipe($.sass().on("error", $.sass.logError))
         .pipe($.autoprefixer())
         .pipe(isProduction ? $.minifyCss() : $.util.noop())
-        .pipe($.sourcemaps.write("./"))
         .pipe($.rename(function(path) {
             path.basename = "styles";
         }))
+        .pipe($.sourcemaps.write("./"))
         .pipe(gulp.dest(sassPaths.dest))
         .pipe(browserSync.stream());
 });

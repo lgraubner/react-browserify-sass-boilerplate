@@ -2,6 +2,7 @@
     "esnext": true,
     "globals": {
         "module": true,
-        "require": true
+        "require": true,
+        "__dirname": true
     }
 }
