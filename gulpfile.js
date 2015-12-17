@@ -27,13 +27,13 @@ const sassPaths = {
 };
 
 const scriptPaths = {
-    src: path.join(dirs.src, "/js/**/*.js"),
+    entry: path.join(dirs.src, "/js/main.jsx"),
     dest: path.join(dirs.dest, "/js/"),
     map: path.join(dirs.dest, "/js/scripts.js.map")
 };
 
 var b = watchify(browserify(_.assign({}, watchify.args, {
-    entries: path.join(dirs.src, "/js/main.jsx"),
+    entries: scriptPaths.entry,
     debug: true
 })));
 
