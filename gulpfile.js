@@ -14,8 +14,6 @@ const _ = {
 };
 const path = require("path");
 
-const isProduction = true;
-
 const dirs = {
     src: path.join(__dirname, 'src'),
     dest: path.join(__dirname, 'build')
@@ -65,7 +63,7 @@ gulp.task("styles", () => {
         .pipe($.sourcemaps.init())
         .pipe($.sass().on("error", $.sass.logError))
         .pipe($.autoprefixer())
-        .pipe(isProduction ? $.minifyCss() : $.util.noop())
+        .pipe($.minifyCss())
         .pipe($.rename(function(path) {
             path.basename = "styles";
         }))
@@ -76,9 +74,7 @@ gulp.task("styles", () => {
 
 gulp.task("default", ["scripts", "styles"], () => {
 
-    gulp.watch(`${dirs.src}/css/scss/**/*.{scss,css}`, ["styles"]).on("change", () => {
-        browserSync.reload();
-    });
+    gulp.watch(`${dirs.src}/css/scss/**/*.{scss,css}`, ["styles"]);
 
     browserSync.init({
         server: {
