@@ -16,7 +16,6 @@
     "url": "https://github.com/lgraubner/base-react-browserify-sass/issues"
   },
   "dependencies": {
-    "normalize.css": "^3.0.3",
     "react": "^0.14.3",
     "react-dom": "^0.14.3"
   },
