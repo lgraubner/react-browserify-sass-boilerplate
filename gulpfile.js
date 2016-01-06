@@ -69,7 +69,7 @@ gulp.task('styles', () => {
     .pipe($.sourcemaps.init())
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.autoprefixer())
-    .pipe($.minifyCss())
+    .pipe($.cssnano())
     .pipe($.rename((p) => {
       p.basename = 'styles';
     }))
