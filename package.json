@@ -1,5 +1,5 @@
 {
-  "name": "base-react-browserify-sass",
+  "name": "react-browserify-sass-boilerplate",
   "version": "0.1.0",
   "description": "Base project using react, browserify, babel, gulp and sass.",
   "author": {
@@ -7,13 +7,13 @@
     "email": "mail@larsgraubner.de",
     "url": "http://larsgraubner.de"
   },
-  "homepage": "https://github.com/lgraubner/base-react-browserify-sass",
+  "homepage": "https://github.com/lgraubner/react-browserify-sass-boilerplate",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lgraubner/base-react-browserify-sass.git"
+    "url": "https://github.com/lgraubner/react-browserify-sass-boilerplate.git"
   },
   "bugs": {
-    "url": "https://github.com/lgraubner/base-react-browserify-sass/issues"
+    "url": "https://github.com/lgraubner/react-browserify-sass-boilerplate/issues"
   },
   "dependencies": {
     "react": "^0.14.3",
