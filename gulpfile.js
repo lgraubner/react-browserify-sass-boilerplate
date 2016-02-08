@@ -1,4 +1,4 @@
-/* eslint no-param-reassign:0 */
+/* eslint no-param-reassign:0 arrow-body-style:0 */
 
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
@@ -7,6 +7,7 @@ const watchify = require('watchify');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const exorcist = require('exorcist');
+const del = require('del');
 
 const _ = {
   assign: require('lodash/object/assign'),
@@ -29,15 +30,13 @@ const scriptPaths = {
   map: path.join(dirs.dest, '/js/scripts.js.map'),
 };
 
-const b = watchify(browserify(_.assign({}, watchify.args, {
+const browserifyOptions = {
   entries: scriptPaths.entry,
   debug: true,
-})));
+};
 
-b.transform('babelify', { presets: ['es2015', 'react'] })
-  .transform({
-    global: true,
-  }, 'uglifyify');
+const w = watchify(browserify(_.assign({}, watchify.args, browserifyOptions)));
+const b = browserify(browserifyOptions);
 
 function lint() {
   return gulp.src(path.join(dirs.src, '/js/**/*.{js,jsx}'))
@@ -47,6 +46,14 @@ function lint() {
 
 function bundle() {
   lint();
+  b.transform('babelify', { presets: ['es2015', 'react'] })
+    .transform({
+      global: true,
+    }, 'uglifyify');
+
+  b.on('update', bundle);
+  b.on('log', $.util.log);
+
   return b.bundle()
     .on('error', (err) => {
       $.util.log(err.message);
@@ -59,10 +66,30 @@ function bundle() {
     .pipe(browserSync.stream({ once: true }));
 }
 
-b.on('update', bundle);
-b.on('log', $.util.log);
+function bundleWatch() {
+  lint();
+  w.transform('babelify', { presets: ['es2015', 'react'] })
+    .transform({
+      global: true,
+    }, 'uglifyify');
+
+  w.on('update', bundle);
+  w.on('log', $.util.log);
+
+  return w.bundle()
+    .on('error', (err) => {
+      $.util.log(err.message);
+      browserSync.notify('Browserify Error!');
+      this.emit('end');
+    })
+    .pipe(exorcist(scriptPaths.map))
+    .pipe(source('scripts.js'))
+    .pipe(gulp.dest(scriptPaths.dest))
+    .pipe(browserSync.stream({ once: true }));
+}
 
 gulp.task('scripts', bundle);
+gulp.task('scripts-watch', bundleWatch);
 
 gulp.task('styles', () => {
   return gulp.src(sassPaths.src)
@@ -78,12 +105,22 @@ gulp.task('styles', () => {
     .pipe(browserSync.stream());
 });
 
-gulp.task('default', ['scripts', 'styles'], () => {
+gulp.task('watch', ['build', 'scripts-watch'], () => {
   gulp.watch(`${dirs.src}/css/scss/**/*.{scss,css}`, ['styles']);
+});
 
+gulp.task('serve', ['watch'], () => {
   browserSync.init({
     server: {
       baseDir: './',
     },
   });
 });
+
+gulp.task('clean', () => {
+  del(['build/**', '!build']);
+});
+
+gulp.task('build', $.sequence('clean', ['scripts', 'styles']));
+
+gulp.task('default', ['build']);
