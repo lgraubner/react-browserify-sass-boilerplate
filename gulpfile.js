@@ -105,7 +105,7 @@ gulp.task('styles', () => {
     .pipe(browserSync.stream());
 });
 
-gulp.task('watch', ['build', 'scripts-watch'], () => {
+gulp.task('watch', ['styles', 'scripts-watch'], () => {
   gulp.watch(`${dirs.src}/css/scss/**/*.{scss,css}`, ['styles']);
 });
 
