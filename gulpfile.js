@@ -8,9 +8,8 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const exorcist = require('exorcist');
 const del = require('del');
-
 const _ = {
-  assign: require('lodash/object/assign'),
+  assign: require('lodash/assign'),
 };
 const path = require('path');
 
@@ -30,14 +29,6 @@ const scriptPaths = {
   map: path.join(dirs.dest, '/js/scripts.js.map'),
 };
 
-const browserifyOptions = {
-  entries: scriptPaths.entry,
-  debug: true,
-};
-
-const w = watchify(browserify(_.assign({}, watchify.args, browserifyOptions)));
-const b = browserify(browserifyOptions);
-
 function lint() {
   return gulp.src(path.join(dirs.src, '/js/**/*.{js,jsx}'))
     .pipe($.eslint())
@@ -46,47 +37,48 @@ function lint() {
 
 function bundle() {
   lint();
+  const b = browserify({
+    entries: scriptPaths.entry,
+  });
   b.transform('babelify', { presets: ['es2015', 'react'] })
     .transform({
       global: true,
+      debug: true,
     }, 'uglifyify');
 
-  b.on('update', bundle);
-  b.on('log', $.util.log);
-
   return b.bundle()
-    .on('error', (err) => {
-      $.util.log(err.message);
-      browserSync.notify('Browserify Error!');
-      this.emit('end');
-    })
     .pipe(exorcist(scriptPaths.map))
     .pipe(source('scripts.js'))
-    .pipe(gulp.dest(scriptPaths.dest))
-    .pipe(browserSync.stream({ once: true }));
+    .pipe(gulp.dest(scriptPaths.dest));
 }
+
+const w = watchify(browserify(_.assign({}, watchify.args, {
+  entries: scriptPaths.entry,
+  debug: true,
+})));
 
 function bundleWatch() {
   lint();
   w.transform('babelify', { presets: ['es2015', 'react'] })
     .transform({
       global: true,
+      debug: true,
     }, 'uglifyify');
-
-  w.on('update', bundle);
-  w.on('log', $.util.log);
 
   return w.bundle()
     .on('error', (err) => {
       $.util.log(err.message);
-      browserSync.notify('Browserify Error!');
+      browserSync.notify('Watchify Error!');
       this.emit('end');
     })
     .pipe(exorcist(scriptPaths.map))
     .pipe(source('scripts.js'))
     .pipe(gulp.dest(scriptPaths.dest))
-    .pipe(browserSync.stream({ once: true }));
+    .pipe(browserSync.stream());
 }
+
+w.on('update', bundleWatch);
+w.on('log', $.util.log);
 
 gulp.task('scripts', bundle);
 gulp.task('scripts-watch', bundleWatch);
@@ -96,7 +88,11 @@ gulp.task('styles', () => {
     .pipe($.sourcemaps.init())
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.autoprefixer())
-    .pipe($.cssnano())
+    .pipe($.cssnano({
+      discardComments: {
+        removeAll: true,
+      },
+    }))
     .pipe($.rename((p) => {
       p.basename = 'styles';
     }))
