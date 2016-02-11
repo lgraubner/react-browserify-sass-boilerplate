@@ -64,7 +64,6 @@ function bundleWatch() {
   w.transform('babelify', { presets: ['es2015', 'react'] })
     .transform({
       global: true,
-      debug: true,
     }, 'uglifyify');
 
   return w.bundle()
