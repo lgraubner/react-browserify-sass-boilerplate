@@ -37,13 +37,15 @@ function lint() {
 
 function bundle() {
   lint();
+
   const b = browserify({
     entries: scriptPaths.entry,
+    debug: true,
   });
+
   b.transform('babelify', { presets: ['es2015', 'react'] })
     .transform({
       global: true,
-      debug: true,
     }, 'uglifyify');
 
   return b.bundle()
