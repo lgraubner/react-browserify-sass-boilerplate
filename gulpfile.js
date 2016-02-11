@@ -9,7 +9,7 @@ const source = require('vinyl-source-stream');
 const exorcist = require('exorcist');
 const del = require('del');
 const _ = {
-  assign: require('lodash/assign'),
+  assign: require('lodash/object/assign'),
 };
 const path = require('path');
 
