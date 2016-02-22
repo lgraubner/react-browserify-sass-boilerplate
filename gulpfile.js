@@ -35,18 +35,18 @@ function lint() {
     .pipe($.eslint.format());
 }
 
+const b = browserify({
+  entries: scriptPaths.entry,
+  debug: true,
+});
+
+b.transform('babelify', { presets: ['es2015', 'react'] })
+  .transform({
+    global: true,
+  }, 'uglifyify');
+
 function bundle() {
   lint();
-
-  const b = browserify({
-    entries: scriptPaths.entry,
-    debug: true,
-  });
-
-  b.transform('babelify', { presets: ['es2015', 'react'] })
-    .transform({
-      global: true,
-    }, 'uglifyify');
 
   return b.bundle()
     .pipe(exorcist(scriptPaths.map))
@@ -59,12 +59,13 @@ const w = watchify(browserify(_.assign({}, watchify.args, {
   debug: true,
 })));
 
+w.transform('babelify', { presets: ['es2015', 'react'] })
+  .transform({
+    global: true,
+  }, 'uglifyify');
+
 function bundleWatch() {
   lint();
-  w.transform('babelify', { presets: ['es2015', 'react'] })
-    .transform({
-      global: true,
-    }, 'uglifyify');
 
   return w.bundle()
     .on('error', (err) => {
