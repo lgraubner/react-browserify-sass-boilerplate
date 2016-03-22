@@ -6,38 +6,28 @@ const browserSync = require('browser-sync').create();
 const watchify = require('watchify');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
-const exorcist = require('exorcist');
 const del = require('del');
 const _ = {
   assign: require('lodash/assign'),
 };
-const path = require('path');
 
-const dirs = {
-  src: path.join(__dirname, 'src'),
-  dest: path.join(__dirname, 'build'),
-};
-
-const sassPaths = {
-  src: path.join(dirs.src, '/css/scss/main.scss'),
-  dest: path.join(dirs.dest, '/css/'),
-};
-
-const scriptPaths = {
-  entry: path.join(dirs.src, '/js/main.jsx'),
-  dest: path.join(dirs.dest, '/js/'),
-  map: path.join(dirs.dest, '/js/scripts.js.map'),
+const config = {
+  prod: !!$.util.env.production,
+  scriptEntry: './src/js/main.jsx',
+  scriptDest: './build/js/',
+  sassEntry: './src/scss/main.scss',
+  sassDest: './build/css/',
 };
 
 function lint() {
-  return gulp.src(path.join(dirs.src, '/js/**/*.{js,jsx}'))
+  return gulp.src('./src/js/**/*.{js,jsx}')
     .pipe($.eslint())
     .pipe($.eslint.format());
 }
 
 const b = browserify({
-  entries: scriptPaths.entry,
-  debug: true,
+  entries: config.scriptEntry,
+  debug: !config.prod,
 });
 
 b.transform('babelify', { presets: ['es2015', 'react'] })
@@ -49,14 +39,13 @@ function bundle() {
   lint();
 
   return b.bundle()
-    .pipe(exorcist(scriptPaths.map))
     .pipe(source('scripts.js'))
-    .pipe(gulp.dest(scriptPaths.dest));
+    .pipe(gulp.dest(config.scriptDest));
 }
 
 const w = watchify(browserify(_.assign({}, watchify.args, {
-  entries: scriptPaths.entry,
-  debug: true,
+  entries: config.scriptEntry,
+  debug: !config.prod,
 })));
 
 w.transform('babelify', { presets: ['es2015', 'react'] })
@@ -73,9 +62,8 @@ function bundleWatch() {
       browserSync.notify('Watchify Error!');
       this.emit('end');
     })
-    .pipe(exorcist(scriptPaths.map))
     .pipe(source('scripts.js'))
-    .pipe(gulp.dest(scriptPaths.dest))
+    .pipe(gulp.dest(config.scriptDest))
     .pipe(browserSync.stream());
 }
 
@@ -86,8 +74,8 @@ gulp.task('scripts', bundle);
 gulp.task('scripts-watch', bundleWatch);
 
 gulp.task('styles', () => {
-  return gulp.src(sassPaths.src)
-    .pipe($.sourcemaps.init())
+  return gulp.src(config.sassEntry)
+    .pipe(!config.prod ? $.sourcemaps.init() : $.util.noop())
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.autoprefixer())
     .pipe($.cssnano({
@@ -98,13 +86,13 @@ gulp.task('styles', () => {
     .pipe($.rename((p) => {
       p.basename = 'styles';
     }))
-    .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest(sassPaths.dest))
+    .pipe(!config.prod ? $.sourcemaps.write('./') : $.util.noop())
+    .pipe(gulp.dest(config.sassDest))
     .pipe(browserSync.stream());
 });
 
 gulp.task('watch', ['styles', 'scripts-watch'], () => {
-  gulp.watch(`${dirs.src}/css/scss/**/*.{scss,css}`, ['styles']);
+  gulp.watch('./src/scss/**/*.{scss,css}', ['styles']);
 });
 
 gulp.task('serve', ['watch'], () => {
@@ -116,7 +104,7 @@ gulp.task('serve', ['watch'], () => {
 });
 
 gulp.task('clean', () => {
-  del(['build/**', '!build']);
+  del(['./build/**', '!./build']);
 });
 
 gulp.task('build', $.sequence('clean', ['scripts', 'styles']));
