@@ -12,15 +12,15 @@ const _ = {
 };
 
 const config = {
-  prod: !!$.util.env.production,
-  scriptEntry: './src/js/main.jsx',
-  scriptDest: './build/js/',
-  sassEntry: './src/scss/main.scss',
-  sassDest: './build/css/',
+  prod: !!$.util.env.prod,
+  scriptEntry: 'src/js/main.jsx',
+  scriptDest: 'build/js/',
+  sassEntry: 'src/scss/main.scss',
+  sassDest: 'build/css/',
 };
 
 function lint() {
-  return gulp.src('./src/js/**/*.{js,jsx}')
+  return gulp.src('src/js/**/*.{js,jsx}')
     .pipe($.eslint())
     .pipe($.eslint.format());
 }
@@ -45,7 +45,7 @@ function bundle() {
 
 const w = watchify(browserify(_.assign({}, watchify.args, {
   entries: config.scriptEntry,
-  debug: !config.prod,
+  debug: true,
 })));
 
 w.transform('babelify', { presets: ['es2015', 'react'] })
@@ -86,25 +86,25 @@ gulp.task('styles', () => {
     .pipe($.rename((p) => {
       p.basename = 'styles';
     }))
-    .pipe(!config.prod ? $.sourcemaps.write('./') : $.util.noop())
+    .pipe(!config.prod ? $.sourcemaps.write() : $.util.noop())
     .pipe(gulp.dest(config.sassDest))
     .pipe(browserSync.stream());
 });
 
 gulp.task('watch', ['styles', 'scripts-watch'], () => {
-  gulp.watch('./src/scss/**/*.{scss,css}', ['styles']);
+  gulp.watch('src/scss/**/*.{scss,css}', ['styles']);
 });
 
 gulp.task('serve', ['watch'], () => {
   browserSync.init({
     server: {
-      baseDir: './',
+      baseDir: '',
     },
   });
 });
 
 gulp.task('clean', () => {
-  del(['./build/**', '!./build']);
+  del(['build/**', '!build']);
 });
 
 gulp.task('build', $.sequence('clean', ['scripts', 'styles']));

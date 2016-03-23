@@ -30,18 +30,18 @@ You should only work in the `src` folder. All processed files will be placed int
 
 ```
 /src
-|-- css
-|   |-- scss
-|   |   |-- components
-|   |   |-- modules
-|   |   `-- partials
+|-- scss
+    |-- components
+    |-- ...
+    `-- main.scss
 `-- js
-    `--components
+    |-- components
+    `-- main.jsx
 ```
 
-The `src` folder contains an `css` and `js` folder. If you are using SASS place it in the `scss` folder. Gulp will search for a `main.scss` file to process it, so make sure you include all your SASS components inside it. Put CSS files in the `css` folder or organize it in subfolders. Third party files should be placed inside the vendor folder. All files have to be referenced in the `main.scss` file!
+The `src` folder contains an `scss` and `js` folder. Gulp will search for a `main.scss` as entry point to process, so make sure you include all your SASS components inside it.
 
-All of your Javscript files should be in the `js` folder or subfolders. Get third party plugins via npm and include them right away.
+All of your Javscript files should be in the `js` folder or subfolders. Get third party plugins via npm and include them right away. `main.jsx` is used as entry point for `browserify`.
 
 ## Get started
 
@@ -54,5 +54,33 @@ $ npm install
 Start gulp and it will watch for changes and builds right away. Your browser will be refreshed automatically by Browsersync.
 
 ```BASH
-$ gulp
+$ npm run serve
 ```
+
+To get ready for production use the following command. Sourcemaps will be stripped from the build files.
+
+```BASH
+$ npm run build:prod
+```
+
+### Full list of commands
+
+#### `npm run clean`
+
+Removes the entire `build` folder.
+
+#### `npm run serve`
+
+Builds everything and starts a browsersync session, watching for your changes.
+
+#### `npm run build`
+
+Builds the project includind sourcemaps for debugging.
+
+#### `npm run build:prod`
+
+Builds the project, ready for production use.
+
+#### `npm run watch`
+
+Watches all file changes and executes the corresponding tasks.
