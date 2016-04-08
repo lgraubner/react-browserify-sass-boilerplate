@@ -12,7 +12,7 @@ const _ = {
 };
 
 const config = {
-  prod: !!$.util.env.prod,
+  prod: (process.env.NODE_ENV === 'production'),
   scriptEntry: 'src/js/main.jsx',
   scriptDest: 'build/js/',
   sassEntry: 'src/scss/main.scss',
