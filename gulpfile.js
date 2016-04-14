@@ -7,9 +7,7 @@ const watchify = require('watchify');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const del = require('del');
-const _ = {
-  assign: require('lodash/assign'),
-};
+const assign = require('lodash.assign');
 
 const config = {
   prod: (process.env.NODE_ENV === 'production'),
@@ -43,7 +41,7 @@ function bundle() {
     .pipe(gulp.dest(config.scriptDest));
 }
 
-const w = watchify(browserify(_.assign({}, watchify.args, {
+const w = watchify(browserify(assign({}, watchify.args, {
   entries: config.scriptEntry,
   debug: true,
 })));
