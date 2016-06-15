@@ -54,7 +54,7 @@
     "clean": "gulp clean",
     "serve": "gulp serve",
     "build": "gulp build",
-    "build:prod": "npm install && NODE_ENV=production gulp build",
+    "build:prod": "NODE_ENV=production gulp build",
     "watch": "gulp watch"
   }
 }
