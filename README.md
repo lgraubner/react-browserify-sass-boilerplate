@@ -1,3 +1,5 @@
+##### *DEPRECATED - This repository is deprecated and will not be updated anymore. Use at your own risk.*
+
 # Base React, Browserify, SASS project
 
 [![David](https://img.shields.io/david/lgraubner/react-browserify-sass-boilerplate.svg)](https://david-dm.org/lgraubner/react-browserify-sass-boilerplate) [![David Dev](https://img.shields.io/david/dev/lgraubner/react-browserify-sass-boilerplate.svg)](https://david-dm.org/lgraubner/react-browserify-sass-boilerplate#info=devDependencies)
