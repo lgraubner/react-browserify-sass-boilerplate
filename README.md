@@ -1,4 +1,6 @@
-##### *DEPRECATED - This repository is deprecated and will not be updated anymore. Use at your own risk.*
+___
+🚧 **DEPRECATED** - This repository is deprecated and will not be updated anymore. Use at your own risk.
+___
 
 # Base React, Browserify, SASS project
 
